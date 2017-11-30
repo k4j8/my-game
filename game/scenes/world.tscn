@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=1]
 
-[ext_resource path="res://tilemap/tilemap.tres" type="TileSet" id=1]
+[ext_resource path="res://tilemap/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://scenes/grid.gd" type="Script" id=2]
 
 [node name="World" type="Node2D"]
@@ -21,7 +21,7 @@ collision/bounce = 0.0
 collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
-tile_data = IntArray( 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 10, 0, 11, 0, 12, 0, 65542, 0, 131073, 0, 131074, 0, 131075, 0, 131076, 0, 131078, 0, 131079, 0, 131080, 0, 131082, 0, 131083, 0, 131084, 0, 196609, 0, 196614, 0, 196620, 0, 262145, 0, 262147, 0, 262148, 0, 262150, 0, 262151, 0, 262152, 0, 262153, 0, 262154, 0, 262156, 0, 327681, 0, 327692, 0, 393217, 0, 393220, 0, 393223, 0, 393224, 0, 393225, 0, 393226, 0, 393227, 0, 393228, 0, 458753, 0, 458754, 0, 458755, 0, 458756, 0, 458757, 0, 458758, 0, 458759, 0 )
+tile_data = IntArray( 65538, 0, 65539, 0, 65540, 0, 131076, 0, 196610, 0, 196612, 0, 196613, 0, 196614, 0, 196615, 0, 196616, 0, 262146, 0, 262152, 0, 327682, 0, 327683, 0, 327684, 0, 327686, 0, 327687, 0, 327688, 0 )
 script/script = ExtResource( 2 )
 __meta__ = {
 "_edit_lock_": true

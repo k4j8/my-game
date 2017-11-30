@@ -1,7 +1,7 @@
 # Collection of functions to work with a Grid. Stores all its children in the grid array
 extends TileMap
 
-enum ENTITY_TYPES {HERO, enemy, COLLECTIBLE}
+enum ENTITY_TYPES {HERO, ENEMY}
 
 var tile_size = get_cell_size()
 var half_tile_size = tile_size / 2
@@ -12,17 +12,19 @@ onready var enemy = preload("res://enemy/enemy.tscn")
 onready var hero = preload("res://hero/hero.tscn")
 
 func _ready():
+
+	# Generate grid
 	for x in range(grid_size.x):
 		grid.append([])
 		for y in range(grid_size.y):
 			grid[x].append(null)
 
-	# Place hero in world and grid
+	# Place hero in world
 	var new_hero = hero.instance()
-	new_hero.set_pos(map_to_world(Vector2(11,12)) + half_tile_size)
+	new_hero.set_pos(map_to_world(Vector2(6,8)) + half_tile_size)
 	add_child(new_hero)
 
-	# Place enemies in world and grid
+	# Generate locations to place enemies in world
 	var positions = []
 	for x in range(5):
 		var placed = false
@@ -33,6 +35,7 @@ func _ready():
 					positions.append(grid_pos)
 					placed = true
 
+	# Place enemies in world and mark in grid
 	for pos in positions:
 		var new_enemy = enemy.instance()
 		new_enemy.set_pos(map_to_world(pos) + half_tile_size)
@@ -45,6 +48,7 @@ func get_cell_content(pos=Vector2()):
 
 
 func is_cell_vacant(pos=Vector2(), direction=Vector2()):
+	# Returns true if cell is vacant and not outside of grid
 	var grid_pos = world_to_map(pos) + direction
 
 	if grid_pos.x < grid_size.x and grid_pos.x >= 0:
