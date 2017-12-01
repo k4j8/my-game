@@ -12,6 +12,9 @@ var grid
 var type
 var target_tile
 
+var dir_x_open
+var dir_y_open
+
 
 func _ready():
 	grid = get_parent()
@@ -29,25 +32,30 @@ func is_tile_open(direction):
 func _fixed_process(delta):
 	direction = Vector2() # resets direction so hero doesn't keep going same direction
 
+	# Get direction from player input
 	if Input.is_action_pressed("ui_up"):
-		direction.y = -1
-		if is_tile_open(direction) == false:
-			direction.y = 0
+			direction.y = -1
 	elif Input.is_action_pressed("ui_down"):
-		direction.y = 1
-		if is_tile_open(direction) == false:
-			direction.y = 0
-
+			direction.y = 1
 	if Input.is_action_pressed("ui_left"):
-		direction.x = -1
-		if is_tile_open(direction) == false:
-			direction.x = 0
+			direction.x = -1
 	elif Input.is_action_pressed("ui_right"):
-		direction.x = 1
-		if is_tile_open(direction) == false:
-			direction.x = 0
+			direction.x = 1
+
+	# Check if tile is blocked by tilemap
+	dir_x_open = is_tile_open( Vector2(direction[0], 0) )
+	dir_y_open = is_tile_open( Vector2(0, direction[1]) )
+	if is_tile_open( direction ) and dir_x_open and dir_y_open: # move along an angle
+		pass
+	elif dir_y_open: # if blocked in x-axis only, travel along y-axis
+		direction.x = 0
+	elif dir_x_open: # if blocked in y-axis only, travel along x-axis
+		direction.y = 0
+	else:
+		direction = Vector2( 0, 0 )
 
 	if not is_moving and direction != Vector2():
+		print(direction)
 
 		# Initialize moving
 		target_direction = direction.normalized()

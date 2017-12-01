@@ -60,7 +60,7 @@ func is_cell_vacant(pos=Vector2(), direction=Vector2()):
 func update_child_pos(new_pos, direction, type):
 	# Remove node from current cell, add it to the new cell, returns the new target move_to position
 	var grid_pos = world_to_map(new_pos)
-	print(grid_pos)
+#	print(grid_pos)
 	grid[grid_pos.x][grid_pos.y] = null
 	
 	var new_grid_pos = grid_pos + direction
