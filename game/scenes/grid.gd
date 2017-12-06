@@ -21,7 +21,7 @@ func _ready():
 
 	# Place hero in world
 	var new_hero = hero.instance()
-	new_hero.set_pos(map_to_world(Vector2(6,8)) + half_tile_size)
+	new_hero.set_pos(map_to_world(Vector2(2,2)) + half_tile_size)
 	add_child(new_hero)
 
 	# Generate locations to place enemies in world

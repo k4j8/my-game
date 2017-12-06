@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var direction = Vector2()
-const SPEED = 100
+const SPEED = 250
 var velocity = Vector2()
 
 var target_pos = Vector2()
@@ -25,7 +25,7 @@ func _ready():
 func is_tile_open(direction):
 	# Check if target tile is not blocked by tilemap
 	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size, [ self ] )
+	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size*2, [ self ] )
 	return true if target_tile.empty() else false
 
 
@@ -55,18 +55,17 @@ func _fixed_process(delta):
 		direction = Vector2( 0, 0 )
 
 	if not is_moving and direction != Vector2():
-		print(direction)
 
 		# Initialize moving
 		target_direction = direction.normalized()
-		if grid.is_cell_vacant(get_pos(), direction):
-			target_pos = grid.update_child_pos(get_pos(), direction, type)
+		if grid.is_cell_vacant(get_pos(), direction) and grid.is_cell_vacant(get_pos(), direction*2):
+			target_pos = grid.update_child_pos(get_pos(), direction*2, type)
 			is_moving = true
 
 	elif is_moving:
 
 		# Prepare to stop moving if target will be reached
-		var move_distance = velocity.length()
+		var move_distance = velocity.length() * 2
 		var distance_to_target = get_pos().distance_to(target_pos)
 		if move_distance > distance_to_target:
 			# Prepare to stop moving since target will be reached
