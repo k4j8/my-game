@@ -34,6 +34,7 @@ func _ready():
 				if not grid_pos in positions:
 					positions.append(grid_pos)
 					placed = true
+#	var positions = [Vector2(2,8)]
 
 	# Place enemies in world and mark in grid
 	for pos in positions:
