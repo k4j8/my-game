@@ -6,6 +6,7 @@ var velocity = Vector2()
 
 var target_pos = Vector2()
 var target_direction = Vector2()
+var new_grid_pos = Vector2()
 var is_moving = false
 
 var grid
@@ -41,10 +42,9 @@ func _fixed_process(delta):
 
 		# Initialize moving
 		target_direction = direction.normalized()
-		if grid.is_cell_vacant(get_pos(), direction) and grid.is_cell_vacant(get_pos(), direction*2):
-			target_pos = grid.update_child_pos(get_pos(), direction*2, type)
-			is_moving = true
-		target_pos = grid.update_child_pos(get_pos(), direction*2, type)
+		var target_arr = grid.update_child_pos(get_pos(), direction*2, type)
+		target_pos = target_arr[0]
+		new_grid_pos = target_arr[1]
 		is_moving = true
 
 	elif is_moving:
