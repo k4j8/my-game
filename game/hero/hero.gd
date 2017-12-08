@@ -25,7 +25,7 @@ func _ready():
 func is_tile_open(direction):
 	# Check if target tile is not blocked by tilemap
 	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size*2, [ self ] )
+	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size*2, [ self ], 1 )
 	return true if target_tile.empty() else false
 
 
@@ -58,9 +58,11 @@ func _fixed_process(delta):
 
 		# Initialize moving
 		target_direction = direction.normalized()
-		if grid.is_cell_vacant(get_pos(), direction) and grid.is_cell_vacant(get_pos(), direction*2):
-			target_pos = grid.update_child_pos(get_pos(), direction*2, type)
-			is_moving = true
+#		if grid.is_cell_vacant(get_pos(), direction) and grid.is_cell_vacant(get_pos(), direction*2):
+#			target_pos = grid.update_child_pos(get_pos(), direction*2, type)
+#			is_moving = true
+		target_pos = grid.update_child_pos(get_pos(), direction*2, type)
+		is_moving = true
 
 	elif is_moving:
 
