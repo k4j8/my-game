@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=1]
 
 [ext_resource path="res://enemy/enemy.gd" type="Script" id=1]
-[ext_resource path="res://enemy/enemy.png" type="Texture" id=2]
+[ext_resource path="res://enemy/enemy.tex" type="Texture" id=2]
 [ext_resource path="res://enemy/enemy_area.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -11,7 +11,7 @@ extents = Vector2( 15, 15 )
 
 [node name="Enemy" type="KinematicBody2D"]
 
-transform/pos = Vector2( 9.53674e-07, 9.53674e-07 )
+transform/scale = Vector2( 0.3125, 0.3125 )
 input/pickable = false
 collision/layers = 0
 collision/mask = 0
@@ -23,9 +23,10 @@ __meta__ = {
 
 [node name="Sprite" type="Sprite" parent="."]
 
-transform/pos = Vector2( -9.53674e-07, -9.53674e-07 )
-transform/scale = Vector2( 0.3125, 0.3125 )
+transform/pos = Vector2( -9.53674e-07, 9.53674e-07 )
+transform/scale = Vector2( 3.2, 3.2 )
 texture = ExtResource( 2 )
+region_rect = Rect2( 45, 31, 2, 3 )
 
 [node name="Area2D" type="Area2D" parent="."]
 

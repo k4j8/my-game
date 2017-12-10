@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=1]
 
-[ext_resource path="res://tilemap/black_square.png" type="Texture" id=1]
+[ext_resource path="res://tilemap/black_square.tex" type="Texture" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
 
