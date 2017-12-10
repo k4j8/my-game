@@ -11,7 +11,9 @@ The game is currently in the early stages of development. The project's name wil
 
 ## Installation
 
-To develop or playtest the game, you will need to download and install the [Godot engine](https://godotengine.org/download), available on Linux, Windows, or OS X. For playtesters, download the current game as a zip file from the main GitHub page or download a stable release from the [releases](https://github.com/KyleWJohnston/my-game/releases) page. Then, import the game folder into Godot (drag-and-drop is supported).
+To playtest the game on 64-bit Windows, visit the [Releases](https://github.com/KyleWJohnston/my-game/releases) page and download the most recent release. Open the folder and run (double-click) Godot_vX.X.X-stable_win64.exe to launch the game.
+
+To playtest on a different operating system, try the most recent version of the game, or contribute to the project, you will need to download and install the [Godot engine](https://godotengine.org/download). Next, download the current game as a zip file from the main GitHub page. Then, import the game folder into Godot (drag-and-drop is supported). Finally, open the project in Godot and press play (or F5).
 
 
 ## Gameplay
