@@ -62,7 +62,7 @@ func _fixed_process(delta):
 		var target_arr = grid.update_child_pos(get_pos(), direction*2, type)
 		target_pos = target_arr[0]
 		new_grid_pos = target_arr[1]
-		print( "Hero position: ", new_grid_pos )
+#		print( "Hero position: ", new_grid_pos )
 		is_moving = true
 
 	elif is_moving:
