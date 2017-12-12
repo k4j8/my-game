@@ -5,4 +5,4 @@ func _ready():
 
 func reset_game ( body ):
 	# Reset game if hero enters area
-    get_tree().reload_current_scene()
+	get_tree().reload_current_scene()
