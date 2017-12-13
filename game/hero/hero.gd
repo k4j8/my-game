@@ -26,7 +26,7 @@ func _ready():
 func is_tile_open(direction):
 	# Check if target tile is not blocked by tilemap
 	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size*2, [ self ], 1 )
+	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction * grid.tile_size * 2, [ self ], 1 )
 	return true if target_tile.empty() else false
 
 
@@ -59,7 +59,7 @@ func _fixed_process(delta):
 
 		# Initialize moving
 		target_direction = direction.normalized()
-		var target_arr = grid.update_child_pos(get_pos(), direction*2, type)
+		var target_arr = grid.update_child_pos(get_pos(), direction * 2, type)
 		target_pos = target_arr[0]
 		new_grid_pos = target_arr[1]
 #		print( "Hero position: ", new_grid_pos )
