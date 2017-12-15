@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
+const SPEEDS = [ 50, 80, 120, 150 ]
 var direction = Vector2()
-const SPEED = 50
 var velocity = Vector2()
 
 var target_pos = Vector2()
@@ -74,6 +74,8 @@ func _fixed_process(delta):
 
 	elif is_moving:
 
+		var speed = SPEEDS[ get_node("/root/global").level % 4 ]
+
 		# Prepare to stop moving if target will be reached
 		var move_distance = velocity.length() * 2
 		var distance_to_target = get_pos().distance_to(target_pos)
@@ -83,7 +85,7 @@ func _fixed_process(delta):
 			is_moving = false
 		else:
 			# Get vector to start or continue moving
-			velocity = SPEED * target_direction * delta
+			velocity = speed * target_direction * delta
 
 		# Move
 		move(velocity)
