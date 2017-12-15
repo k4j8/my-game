@@ -1,6 +1,7 @@
+# Define how heroes should move
 extends KinematicBody2D
 
-const SPEEDS = [ 250, 300, 325, 350 ]
+const SPEEDS = [ 250, 300, 325, 350 ] # current speed depends on level
 var direction = Vector2()
 var velocity = Vector2()
 

@@ -1,6 +1,7 @@
+# Define how enemies should move
 extends KinematicBody2D
 
-const SPEEDS = [ 50, 80, 120, 150 ]
+const SPEEDS = [ 50, 80, 120, 150 ] # current speed depends on level
 var direction = Vector2()
 var velocity = Vector2()
 
@@ -13,11 +14,13 @@ var grid
 var type
 var target_tile
 
-var ai_current_dir = 1
-var ai_dir = [ Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(0,-1) ] # right, down, left, up
+const AI_DIR_ORDER = [ Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1) ] # right, down, left, up
+var ai_dir_num = 1 # current direction as defined by an element in AI_DIR_ORDER
+
 enum AI_MOVEMENT_TYPE {LEFT, RIGHT, RAND, FOLLOW}
 var i
 var available_dir = []
+
 
 func _ready():
 	grid = get_parent()
@@ -36,28 +39,37 @@ func get_ai_direction(type):
 	# Determine how enemy should move
 
 	if type == LEFT or type == RIGHT:
+		# Left- or right-seeking enemies
 		if type == LEFT:
-			i = 1
+			i = 1 # check previous direction in AI_DIR_ORDER then proceed forwards
 		else:
-			i = -1
-		ai_current_dir -= i
-		ai_current_dir = ai_current_dir % 4
-		while is_tile_open( ai_dir[ai_current_dir] ) == false:
-			ai_current_dir += i
-			ai_current_dir = ai_current_dir % 4
-		return ai_dir[ai_current_dir]
-	
+			i = -1 # check next direction in AI_DIR_ORDER then proceed backwards
+
+		ai_dir_num -= i # check previous/next direction first
+		ai_dir_num = ai_dir_num % 4 
+		while is_tile_open( AI_DIR_ORDER[ai_dir_num] ) == false:
+			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
+			ai_dir_num = ai_dir_num % 4
+		return AI_DIR_ORDER[ai_dir_num]
+
 	if type == RAND:
+		# Picks random valid direction except backwards after each move
+
+		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if is_tile_open( ai_dir[(ai_current_dir + turn) % 4] ):
-				available_dir.append((ai_current_dir + turn) % 4)
+			if is_tile_open( AI_DIR_ORDER[(ai_dir_num + turn) % 4] ):
+				available_dir.append((ai_dir_num + turn) % 4)
+
 		if available_dir.size() == 0:
-			ai_current_dir -= 2 # turn around
+			# If no directions found, turn around
+			ai_dir_num -= 2 # turn around
 		else:
-			ai_current_dir = available_dir[randi() % available_dir.size()] # select one of available directions at random
-		ai_current_dir = ai_current_dir % 4
-		return ai_dir[ ai_current_dir ]
+			# If directions found, select one at random
+			ai_dir_num = available_dir[randi() % available_dir.size()]
+
+		ai_dir_num = ai_dir_num % 4
+		return AI_DIR_ORDER[ ai_dir_num ]
 
 
 func _fixed_process(delta):

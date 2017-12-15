@@ -1,10 +1,9 @@
+# Win conditions and feedback
 extends Area2D
-
-var hero_count = 1
 
 
 func _ready():
-	connect("body_enter", self, "win")
+	connect("body_enter", self, "win") # need to update so this only plays when all heroes enter
 
 
 func win(body):
@@ -21,5 +20,6 @@ func win(body):
 
 
 func _on_timer_timeout():
+	# Increase level and reset game
 	get_node("/root/global").level +=1
 	get_tree().reload_current_scene()
