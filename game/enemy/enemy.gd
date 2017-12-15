@@ -1,23 +1,26 @@
 # Define how enemies should move
 extends KinematicBody2D
 
+# Properties
+var type
 const SPEEDS = [ 50, 80, 120, 150 ] # current speed depends on level
+enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
+var ai_movement_type
+
+# Movement
+var grid
 var direction = Vector2()
 var velocity = Vector2()
-
 var target_pos = Vector2()
 var target_direction = Vector2()
+var target_tile
 var new_grid_pos = Vector2()
 var is_moving = false
 
-var grid
-var type
-var target_tile
-
+# AI
 const AI_DIR_ORDER = [ Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1) ] # right, down, left, up
 var ai_dir_num = 1 # current direction as defined by an element in AI_DIR_ORDER
-
-enum AI_MOVEMENT_TYPE {LEFT, RIGHT, RAND, FOLLOW}
+var rotation = 0
 var i
 var available_dir = []
 
@@ -25,7 +28,12 @@ var available_dir = []
 func _ready():
 	grid = get_parent()
 	type = grid.ENEMY
+	ai_movement_type = LEFT
 	set_fixed_process(true)
+
+	# Make black dot on enemy point to direction of attempted direction instead of forwards
+#	if ai_movement_type == LEFT: rotation = PI / 2
+#	if ai_movement_type == RIGHT: rotation = -PI / 2
 
 
 func is_tile_open(direction):
@@ -46,10 +54,13 @@ func get_ai_direction(type):
 			i = -1 # check next direction in AI_DIR_ORDER then proceed backwards
 
 		ai_dir_num -= i # check previous/next direction first
+		rotation += (PI / 2 * i)
 		ai_dir_num = ai_dir_num % 4 
 		while is_tile_open( AI_DIR_ORDER[ai_dir_num] ) == false:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
+			rotation -= (PI / 2 * i)
 			ai_dir_num = ai_dir_num % 4
+		self.set_rot(rotation)
 		return AI_DIR_ORDER[ai_dir_num]
 
 	if type == RAND:
@@ -75,7 +86,7 @@ func get_ai_direction(type):
 func _fixed_process(delta):
 
 	if not is_moving:
-		direction = get_ai_direction( LEFT )
+		direction = get_ai_direction( ai_movement_type )
 
 		# Initialize moving
 		target_direction = direction.normalized()

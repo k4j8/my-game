@@ -1,19 +1,21 @@
 # Define how heroes should move
 extends KinematicBody2D
 
+# Properties
+var type
 const SPEEDS = [ 250, 300, 325, 350 ] # current speed depends on level
+
+# Movement
+var grid
 var direction = Vector2()
 var velocity = Vector2()
-
 var target_pos = Vector2()
 var target_direction = Vector2()
+var target_tile
 var new_grid_pos = Vector2()
 var is_moving = false
 
-var grid
-var type
-var target_tile
-
+# Ray-casting
 var dir_x_open
 var dir_y_open
 
