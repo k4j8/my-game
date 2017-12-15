@@ -17,6 +17,7 @@ var ai_current_dir = 1
 var ai_dir = [ Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(0,-1) ] # right, down, left, up
 enum AI_MOVEMENT_TYPE {LEFT, RIGHT, RAND, FOLLOW}
 var i
+var available_dir = []
 
 func _ready():
 	grid = get_parent()
@@ -32,24 +33,35 @@ func is_tile_open(direction):
 
 
 func get_ai_direction(type):
+	# Determine how enemy should move
+
 	if type == LEFT or type == RIGHT:
 		if type == LEFT:
 			i = 1
 		else:
 			i = -1
 		ai_current_dir -= i
-		if ai_current_dir == 4: ai_current_dir = 0
-		if ai_current_dir == -1: ai_current_dir = 3
+		ai_current_dir = ai_current_dir % 4
 		while is_tile_open( ai_dir[ai_current_dir] ) == false:
 			ai_current_dir += i
-			if ai_current_dir == 4: ai_current_dir = 0
-			if ai_current_dir == -1: ai_current_dir = 3
+			ai_current_dir = ai_current_dir % 4
 		return ai_dir[ai_current_dir]
+	
+	if type == RAND:
+		available_dir = []
+		for turn in range(-1,2): # try turn left, go straight, and turn right
+			if is_tile_open( ai_dir[(ai_current_dir + turn) % 4] ):
+				available_dir.append((ai_current_dir + turn) % 4)
+		if available_dir.size() == 0:
+			ai_current_dir -= 2 # turn around
+		else:
+			ai_current_dir = available_dir[randi() % available_dir.size()] # select one of available directions at random
+		ai_current_dir = ai_current_dir % 4
+		return ai_dir[ ai_current_dir ]
 
 
 func _fixed_process(delta):
 
-	# Get direction by trying previous direction then progressing through list (will result in following wall on left side)
 	if not is_moving:
 		direction = get_ai_direction( LEFT )
 
