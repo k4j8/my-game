@@ -13,8 +13,10 @@ var grid
 var type
 var target_tile
 
-var ai_current_dir = 0
+var ai_current_dir = 1
 var ai_dir = [ Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(0,-1) ] # right, down, left, up
+enum AI_MOVEMENT_TYPE {LEFT, RIGHT, RAND, FOLLOW}
+var i
 
 func _ready():
 	grid = get_parent()
@@ -29,16 +31,27 @@ func is_tile_open(direction):
 	return true if target_tile.empty() else false
 
 
+func get_ai_direction(type):
+	if type == LEFT or type == RIGHT:
+		if type == LEFT:
+			i = 1
+		else:
+			i = -1
+		ai_current_dir -= i
+		if ai_current_dir == 4: ai_current_dir = 0
+		if ai_current_dir == -1: ai_current_dir = 3
+		while is_tile_open( ai_dir[ai_current_dir] ) == false:
+			ai_current_dir += i
+			if ai_current_dir == 4: ai_current_dir = 0
+			if ai_current_dir == -1: ai_current_dir = 3
+		return ai_dir[ai_current_dir]
+
+
 func _fixed_process(delta):
 
 	# Get direction by trying previous direction then progressing through list (will result in following wall on left side)
 	if not is_moving:
-		while is_tile_open( ai_dir[ai_current_dir] ) == false:
-			ai_current_dir += 1
-			if ai_current_dir == 4: ai_current_dir = 0
-		direction = ai_dir[ai_current_dir]
-		ai_current_dir -= 1
-		if ai_current_dir == -1: ai_current_dir = 3
+		direction = get_ai_direction( LEFT )
 
 		# Initialize moving
 		target_direction = direction.normalized()
