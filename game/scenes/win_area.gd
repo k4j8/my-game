@@ -9,6 +9,7 @@ func _ready():
 
 func win(body):
 	# Play win sound effect
+	get_tree().get_root().get_node("World").get_node("StreamPlayer").stop()
 	get_tree().get_root().get_node("World").get_node("Sounds").play("win")
 	
 	# Start timer to reset game
