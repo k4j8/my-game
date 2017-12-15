@@ -1,9 +1,8 @@
 [gd_scene format=1]
 
-[node name="pause_popup" type="Panel"]
+[node name="PausePopup" type="Panel"]
 
 process/pause_mode = 2
-visibility/visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2

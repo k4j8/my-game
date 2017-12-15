@@ -10,7 +10,7 @@ func _input(event):
 	if event.is_action_pressed("pause"):
 		if get_tree().is_paused():
 			get_tree().set_pause(false)
-			get_node("pause_popup").hide()
+			get_node("PausePopup").hide()
 		else:
-			get_node("pause_popup").show()
+			get_node("PausePopup").show()
 			get_tree().set_pause(true)
