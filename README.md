@@ -11,14 +11,14 @@ The game is currently in the early stages of development. The project's name wil
 
 ## Installation
 
-To playtest the game on 64-bit Windows, visit the [Releases](https://github.com/KyleWJohnston/my-game/releases) page and download the most recent release. Open the folder and run (double-click) Godot_vX.X.X-stable_win64.exe to launch the game.
+To playtest the game on 64-bit Windows, visit the [Releases](https://github.com/KyleWJohnston/my-game/releases) page and download the most recent release. Open the folder and run (double-click) `Godot_vX.X.X-stable_win64.exe` to launch the game.
 
-To playtest on a different operating system, try the most recent version of the game, or contribute to the project, you will need to download and install the [Godot engine](https://godotengine.org/download). Next, download the current game as a zip file from the main GitHub page. Then, import the game folder into Godot (drag-and-drop is supported). Finally, open the project in Godot and press play (or F5).
+To playtest on a different operating system, try the most recent version of the game, or contribute to the project, you will need to download the [Godot engine](https://godotengine.org/download). Next, download the current game as a zip file from the main GitHub page to playtest or pull using Git to contribute to the project. Start Godot by double-clicking the Godot executable and import the game folder (the folder with `engine.cfg` in it) into Godot (drag-and-drop is supported). Finally, open the project in Godot and press play (or F5).
 
 
 ## Gameplay
 
-Use the arrow keys to move.
+Use the arrow keys to move and space to pause.
 
 
 ## Feedback
