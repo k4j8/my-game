@@ -54,11 +54,11 @@ func get_ai_direction(type):
 
 		ai_dir_num -= i # check previous/next direction first
 		rotation += (PI / 2 * i)
-		ai_dir_num = ai_dir_num % 4 
+		ai_dir_num = int( fposmod(ai_dir_num, 4) )
 		while is_tile_open( AI_DIR_ORDER[ai_dir_num] ) == false:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
 			rotation -= (PI / 2 * i)
-			ai_dir_num = ai_dir_num % 4
+			ai_dir_num = int( fposmod(ai_dir_num, 4) )
 		self.set_rot(rotation)
 		return AI_DIR_ORDER[ai_dir_num]
 
@@ -68,8 +68,8 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if is_tile_open( AI_DIR_ORDER[(ai_dir_num + turn) % 4] ):
-				available_dir.append((ai_dir_num + turn) % 4)
+			if is_tile_open( AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ):
+				available_dir.append( int( fposmod((ai_dir_num + turn), 4) ) )
 
 		if available_dir.size() == 0:
 			# If no directions found, turn around
@@ -78,7 +78,11 @@ func get_ai_direction(type):
 			# If directions found, select one at random
 			ai_dir_num = available_dir[randi() % available_dir.size()]
 
-		ai_dir_num = ai_dir_num % 4
+		ai_dir_num = int( fposmod(ai_dir_num, 4) )
+		if ai_dir_num == 0: self.set_rot(PI / 2)
+		elif ai_dir_num == 1: self.set_rot(0)
+		elif ai_dir_num == 2: self.set_rot(3 * PI / 2)
+		elif ai_dir_num == 3: self.set_rot(PI)
 		return AI_DIR_ORDER[ ai_dir_num ]
 
 
