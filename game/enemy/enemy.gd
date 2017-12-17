@@ -5,7 +5,7 @@ extends KinematicBody2D
 var type
 const SPEEDS = [ 50, 80, 120, 150 ] # current speed depends on level
 enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
-var ai_movement_type
+export var AI_MOVEMENT_TYPE = LEFT
 
 # Movement
 var grid
@@ -28,12 +28,11 @@ var available_dir = []
 func _ready():
 	grid = get_parent()
 	type = grid.ENEMY
-	ai_movement_type = LEFT
 	set_fixed_process(true)
 
 	# Make black dot on enemy point to direction of attempted direction instead of forwards
-#	if ai_movement_type == LEFT: rotation = PI / 2
-#	if ai_movement_type == RIGHT: rotation = -PI / 2
+#	if AI_MOVEMENT_TYPE == LEFT: rotation = PI / 2
+#	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
 func is_tile_open(direction):
@@ -86,7 +85,7 @@ func get_ai_direction(type):
 func _fixed_process(delta):
 
 	if not is_moving:
-		direction = get_ai_direction( ai_movement_type )
+		direction = get_ai_direction( AI_MOVEMENT_TYPE )
 
 		# Initialize moving
 		target_direction = direction.normalized()
