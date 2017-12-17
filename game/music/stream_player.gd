@@ -6,7 +6,10 @@ var song
 
 
 func _ready():
+	play_song()
+
+func play_song():
 	# Play song that correspends to level
-	song = load("res://music/" + songs[ get_node("/root/global").level % 4 ] )
+	song = load("res://music/" + songs[ get_node("/root/global").level % 4 ])
 	set_stream(song)
 	play()

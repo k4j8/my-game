@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 # Properties
 var type
-const SPEEDS = [ 50, 80, 120, 150 ] # current speed depends on level
+const SPEEDS = [ 50, 80, 100, 120 ] # current speed depends on level
 enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
 export var AI_MOVEMENT_TYPE = LEFT
 

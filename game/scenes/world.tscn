@@ -1,18 +1,17 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://scenes/world.gd" type="Script" id=1]
 [ext_resource path="res://sound/reset.smp" type="Sample" id=2]
 [ext_resource path="res://sound/win.smp" type="Sample" id=3]
-[ext_resource path="res://scenes/sounds.gd" type="Script" id=4]
-[ext_resource path="res://music/stream_player.gd" type="Script" id=5]
-[ext_resource path="res://scenes/win_area.gd" type="Script" id=6]
-[ext_resource path="res://tilemap/tileset.tres" type="TileSet" id=7]
-[ext_resource path="res://scenes/grid.gd" type="Script" id=8]
-[ext_resource path="res://hero/hero.tscn" type="PackedScene" id=9]
-[ext_resource path="res://enemy/enemy.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=11]
+[ext_resource path="res://sound/sound.gd" type="Script" id=4]
+[ext_resource path="res://scenes/win_area.gd" type="Script" id=5]
+[ext_resource path="res://tilemap/tileset.tres" type="TileSet" id=6]
+[ext_resource path="res://scenes/grid.gd" type="Script" id=7]
+[ext_resource path="res://hero/hero.tscn" type="PackedScene" id=8]
+[ext_resource path="res://enemy/enemy.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=10]
 
-[sub_resource type="SampleLibrary" id=1]
+[sub_resource type="SampleLibrary" id=3]
 
 samples/reset = {
 "db": 0.0,
@@ -27,7 +26,7 @@ samples/win = {
 "sample": ExtResource( 3 )
 }
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=4]
 
 custom_solver_bias = 0.0
 extents = Vector2( 10, 10 )
@@ -37,7 +36,7 @@ extents = Vector2( 10, 10 )
 process/pause_mode = 1
 script/script = ExtResource( 1 )
 
-[node name="Sounds" type="SamplePlayer2D" parent="."]
+[node name="Sound" type="SamplePlayer2D" parent="."]
 
 params/volume_db = 0.0
 params/pitch_scale = 1.0
@@ -45,27 +44,15 @@ params/attenuation/min_distance = 1.0
 params/attenuation/max_distance = 2048.0
 params/attenuation/distance_exp = 1.0
 config/polyphony = 1
-config/samples = SubResource( 1 )
+config/samples = SubResource( 3 )
 config/pitch_random = 0.0
 script/script = ExtResource( 4 )
-
-[node name="StreamPlayer" type="StreamPlayer" parent="."]
-
-stream/stream = null
-stream/play = false
-stream/loop = false
-stream/volume_db = 0.0
-stream/autoplay = false
-stream/paused = false
-stream/loop_restart_time = 0.0
-stream/buffering_ms = 500
-script/script = ExtResource( 5 )
 
 [node name="WinArea" type="Area2D" parent="."]
 
 transform/pos = Vector2( 490, 370 )
 input/pickable = true
-shapes/0/shape = SubResource( 2 )
+shapes/0/shape = SubResource( 4 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -74,14 +61,14 @@ linear_damp = 0.1
 angular_damp = 1.0
 collision/layers = 0
 collision/mask = 2
-script/script = ExtResource( 6 )
+script/script = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WinArea"]
 
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 trigger = false
 _update_shape_index = 0
 
@@ -90,7 +77,7 @@ _update_shape_index = 0
 process/pause_mode = 1
 editor/display_folded = true
 mode = 0
-tile_set = ExtResource( 7 )
+tile_set = ExtResource( 6 )
 cell/size = Vector2( 20, 20 )
 cell/quadrant_size = 16
 cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
@@ -104,96 +91,96 @@ collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray( 65537, 0, 65538, 0, 65539, 0, 65540, 0, 65541, 0, 65542, 0, 65543, 0, 65544, 0, 65545, 0, 65546, 0, 65547, 0, 65548, 0, 65549, 0, 65550, 0, 65551, 0, 65552, 0, 65553, 0, 65554, 0, 65555, 0, 65556, 0, 65557, 0, 65558, 0, 65559, 0, 131073, 0, 131085, 0, 131095, 0, 196609, 0, 196610, 0, 196611, 0, 196613, 0, 196615, 0, 196616, 0, 196617, 0, 196618, 0, 196619, 0, 196621, 0, 196622, 0, 196623, 0, 196625, 0, 196627, 0, 196629, 0, 196631, 0, 262145, 0, 262153, 0, 262157, 0, 262161, 0, 262163, 0, 262165, 0, 262167, 0, 327681, 0, 327683, 0, 327684, 0, 327685, 0, 327687, 0, 327688, 0, 327689, 0, 327691, 0, 327692, 0, 327693, 0, 327694, 0, 327695, 0, 327697, 0, 327699, 0, 327700, 0, 327701, 0, 327703, 0, 393217, 0, 393225, 0, 393229, 0, 393233, 0, 393235, 0, 393239, 0, 458753, 0, 458755, 0, 458757, 0, 458758, 0, 458759, 0, 458760, 0, 458761, 0, 458763, 0, 458765, 0, 458766, 0, 458767, 0, 458769, 0, 458771, 0, 458772, 0, 458773, 0, 458775, 0, 524289, 0, 524291, 0, 524293, 0, 524297, 0, 524301, 0, 524305, 0, 524309, 0, 524311, 0, 589825, 0, 589827, 0, 589829, 0, 589831, 0, 589832, 0, 589833, 0, 589835, 0, 589837, 0, 589838, 0, 589839, 0, 589841, 0, 589843, 0, 589844, 0, 589845, 0, 589847, 0, 655361, 0, 655363, 0, 655371, 0, 655373, 0, 655377, 0, 655379, 0, 655383, 0, 720897, 0, 720898, 0, 720899, 0, 720900, 0, 720901, 0, 720902, 0, 720903, 0, 720904, 0, 720905, 0, 720907, 0, 720908, 0, 720909, 0, 720911, 0, 720912, 0, 720913, 0, 720915, 0, 720916, 0, 720917, 0, 720919, 0, 786433, 0, 786437, 0, 786445, 0, 786447, 0, 786451, 0, 786455, 0, 851969, 0, 851971, 0, 851973, 0, 851975, 0, 851977, 0, 851979, 0, 851981, 0, 851983, 0, 851985, 0, 851987, 0, 851989, 0, 851991, 0, 917505, 0, 917507, 0, 917511, 0, 917513, 0, 917517, 0, 917519, 0, 917521, 0, 917523, 0, 917525, 0, 917527, 0, 983041, 0, 983043, 0, 983045, 0, 983046, 0, 983047, 0, 983048, 0, 983049, 0, 983051, 0, 983053, 0, 983055, 0, 983057, 0, 983059, 0, 983061, 0, 983063, 0, 1048577, 0, 1048585, 0, 1048589, 0, 1048595, 0, 1048597, 0, 1048599, 0, 1114113, 0, 1114117, 0, 1114118, 0, 1114119, 0, 1114121, 0, 1114123, 0, 1114125, 0, 1114126, 0, 1114127, 0, 1114129, 0, 1114130, 0, 1114131, 0, 1114133, 0, 1114134, 0, 1114135, 0, 1179649, 0, 1179665, 0, 1245185, 0, 1245186, 0, 1245187, 0, 1245188, 0, 1245189, 0, 1245190, 0, 1245191, 0, 1245192, 0, 1245193, 0, 1245194, 0, 1245195, 0, 1245196, 0, 1245197, 0, 1245198, 0, 1245199, 0, 1245200, 0, 1245201, 0, 1245202, 0, 1245203, 0, 1245204, 0, 1245205, 0, 1245206, 0, 1245207, 0 )
-script/script = ExtResource( 8 )
+script/script = ExtResource( 7 )
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Hero" parent="Grid" instance=ExtResource( 9 )]
+[node name="Hero" parent="Grid" instance=ExtResource( 8 )]
 
 transform/pos = Vector2( 50, 50 )
 
-[node name="Enemy" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 90, 90 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 2" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 2" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 90, 170 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 3" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 3" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 170, 90 )
 AI_MOVEMENT_TYPE = 1
 
-[node name="Enemy 4" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 4" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 50, 170 )
 AI_MOVEMENT_TYPE = 2
 
-[node name="Enemy 5" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 5" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 210, 290 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 6" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 6" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 210, 330 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 7" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 7" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 210, 370 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 8" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 8" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 130, 290 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 9" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 9" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 170, 370 )
 AI_MOVEMENT_TYPE = 1
 
-[node name="Enemy 10" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 10" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 90, 270 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 11" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 11" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 370, 330 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 12" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 12" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 290, 330 )
 AI_MOVEMENT_TYPE = 2
 
-[node name="Enemy 13" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 13" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 330, 250 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 14" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 14" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 410, 250 )
 AI_MOVEMENT_TYPE = 0
 
-[node name="Enemy 15" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 15" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 370, 70 )
 AI_MOVEMENT_TYPE = 2
 
-[node name="Enemy 16" parent="Grid" instance=ExtResource( 10 )]
+[node name="Enemy 16" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 290, 50 )
 AI_MOVEMENT_TYPE = 1
 
-[node name="PausePopup" parent="." instance=ExtResource( 11 )]
+[node name="PausePopup" parent="." instance=ExtResource( 10 )]
 
 visibility/visible = false
 

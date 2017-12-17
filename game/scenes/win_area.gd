@@ -9,8 +9,8 @@ func _ready():
 func win(body):
 
 	# Play win sound effect
-	get_tree().get_root().get_node("World").get_node("StreamPlayer").stop()
-	get_tree().get_root().get_node("World").get_node("Sounds").play("win")
+	get_node("/root/stream_player").stop()
+	get_tree().get_root().get_node("Main").get_node("World").get_node("Sound").play("win")
 
 	# Start timer to reset game
 	var timer = Timer.new()
@@ -21,5 +21,6 @@ func win(body):
 
 func _on_timer_timeout():
 	# Increase level and reset game
-	get_node("/root/global").level +=1
+	get_node("/root/global").level += 1
+	get_node("/root/stream_player").play_song()
 	get_tree().reload_current_scene()
