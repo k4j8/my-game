@@ -20,6 +20,7 @@ script/script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
+AI_MOVEMENT_TYPE = 0
 
 [node name="Sprite" type="Sprite" parent="."]
 
