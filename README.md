@@ -18,9 +18,9 @@ To playtest on a different operating system, try the most recent version of the 
 
 ## Gameplay
 
-On keyboard, use the arrow keys to move and space to pause.
+On keyboard, use WASD and the arrow keys to move and space to pause.
 
-On gamepad, use the d-pad to move and start to pause.
+On gamepad, use the d-pad and buttons to move and start to pause.
 
 
 ## Feedback
