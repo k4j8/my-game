@@ -85,7 +85,6 @@ _update_shape_index = 0
 [node name="Grid" type="TileMap" parent="."]
 
 process/pause_mode = 1
-editor/display_folded = true
 mode = 0
 tile_set = ExtResource( 7 )
 cell/size = Vector2( 20, 20 )
@@ -109,6 +108,7 @@ __meta__ = {
 [node name="Hero 1" parent="Grid" instance=ExtResource( 9 )]
 
 transform/pos = Vector2( 50, 50 )
+HERO_NUM = 1
 
 [node name="Hero 2" parent="Grid" instance=ExtResource( 10 )]
 

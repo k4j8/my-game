@@ -4,6 +4,7 @@ extends KinematicBody2D
 # Properties
 var type
 const SPEEDS = [ 250, 300, 325, 350 ] # current speed depends on level
+export var HERO_NUM = 1
 
 # Movement
 var grid
@@ -39,14 +40,24 @@ func _fixed_process(delta):
 	direction = Vector2() # resets direction so hero doesn't keep going same direction
 
 	# Get direction from player input
-	if Input.is_action_pressed("ui_up"):
+	if HERO_NUM == 1:
+		if Input.is_action_pressed("ui_up"):
+				direction.y = -1
+		elif Input.is_action_pressed("ui_down"):
+				direction.y = 1
+		if Input.is_action_pressed("ui_left"):
+				direction.x = -1
+		elif Input.is_action_pressed("ui_right"):
+				direction.x = 1
+	elif HERO_NUM == 2:
+		if Input.is_action_pressed("ui2_up"):
 			direction.y = -1
-	elif Input.is_action_pressed("ui_down"):
-			direction.y = 1
-	if Input.is_action_pressed("ui_left"):
-			direction.x = -1
-	elif Input.is_action_pressed("ui_right"):
-			direction.x = 1
+		elif Input.is_action_pressed("ui2_down"):
+				direction.y = 1
+		if Input.is_action_pressed("ui2_left"):
+				direction.x = -1
+		elif Input.is_action_pressed("ui2_right"):
+				direction.x = 1
 
 	# Check if tile is blocked by tilemap
 	dir_x_open = is_tile_open( Vector2(direction[0], 0) )
