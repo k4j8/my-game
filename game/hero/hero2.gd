@@ -22,7 +22,8 @@ var dir_y_open
 
 func _ready():
 	grid = get_parent()
-	type = grid.HERO
+	world = grid.get_parent()
+	type = world.HERO
 	set_fixed_process(true)
 
 

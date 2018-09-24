@@ -1,22 +1,30 @@
 # Collection of functions to work with a Grid.
 extends TileMap
 
-enum ENTITY_TYPES {HERO, ENEMY}
-
 var tile_size = get_cell_size()
 var half_tile_size = tile_size / 2
 
 onready var enemy = preload("res://enemy/enemy.tscn")
 onready var hero = preload("res://hero/hero.tscn")
+onready var hero2 = preload("res://hero/hero2.tscn")
 
 
 func _ready():
 	pass
 
+func add_hero(pos):
 #	# Place hero in world
-#	var new_hero = hero.instance()
-#	new_hero.set_pos(map_to_world(Vector2(2,2)) + half_tile_size)
-#	add_child(new_hero)
+
+	if not has_node("Hero") or not has_node("Hero 2"):
+		var new_hero
+		if not has_node("Hero"):
+			new_hero = hero.instance()
+			new_hero.set_name("Hero")
+		elif not has_node("Hero 2"):
+			new_hero = hero2.instance()
+			new_hero.set_name("Hero 2")
+		new_hero.set_pos(pos)
+		add_child(new_hero)
 
 #	# Place enemies in world
 #	var positions = [ Vector2(4,4) ]

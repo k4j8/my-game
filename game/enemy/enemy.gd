@@ -27,7 +27,8 @@ var available_dir = []
 
 func _ready():
 	grid = get_parent()
-	type = grid.ENEMY
+	world = grid.get_parent()
+	type = world.ENEMY
 	set_fixed_process(true)
 
 	# Make black dot on enemy point to direction of attempted direction instead of forwards

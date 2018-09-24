@@ -1,6 +1,8 @@
 # Base world to be loaded by default
 extends Node2D
 
+enum ENTITY_TYPES {HERO, ENEMY}
+
 
 func _ready():
 	set_process_input(true)
