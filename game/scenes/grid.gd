@@ -5,7 +5,7 @@ var tile_size = get_cell_size()
 var half_tile_size = tile_size / 2
 
 onready var enemy = preload("res://enemy/enemy.tscn")
-onready var hero = preload("res://hero/hero.tscn")
+onready var hero = preload("res://hero/hero1.tscn")
 onready var hero2 = preload("res://hero/hero2.tscn")
 
 
@@ -15,9 +15,9 @@ func _ready():
 func add_hero(pos):
 #	# Place hero in world
 
-	if not has_node("Hero") or not has_node("Hero 2"):
+	if not has_node("Hero 1") or not has_node("Hero 2"):
 		var new_hero
-		if not has_node("Hero"):
+		if not has_node("Hero 1"):
 			new_hero = hero.instance()
 			new_hero.set_name("Hero")
 		elif not has_node("Hero 2"):

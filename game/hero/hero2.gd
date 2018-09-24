@@ -7,6 +7,7 @@ const SPEEDS = [ 250, 300, 325, 350 ] # current speed depends on level
 
 # Movement
 var grid
+var world
 var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
