@@ -5,6 +5,7 @@ extends KinematicBody2D
 var type
 const SPEEDS = [ 50, 80, 100, 120 ] # current speed depends on level
 enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
+enum DIRECTIONS {RIGHT, DOWN, LEFT, UP} # creates dictionary with values 0 through 3
 export var AI_MOVEMENT_TYPE = LEFT
 
 # Movement
@@ -25,6 +26,14 @@ var rotation = 0
 var i
 var available_dir = []
 
+# AI follower
+# Define global variables
+var current_pos = get_pos()
+var current_type = 0
+var best_path_length = 999
+var best_path_directions = '' # list of directions
+var current_path_directions = '' # list of directions
+
 
 func _ready():
 	grid = get_parent()
@@ -37,11 +46,41 @@ func _ready():
 #	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
-func is_tile_open(direction):
-	# Check if target tile is not blocked by tilemap
+func check_location(current_pos, direction):
+	# Get tile type
 	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction*grid.tile_size * 2, [ self ], 1 )
-	return true if target_tile.empty() else false
+	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * grid.tile_size * 2, [self], 1 )
+	if target_tile.empty():
+		return -1
+	else:
+		print(target_tile.collider.get_parent())
+		return target_tile.collider.get_parent().type()
+
+
+func find_path(current_pos, direction, current_path_length):
+
+	# Compare against best_path_length
+	if current_path_length >= best_path_length:
+		return
+
+	# Get current tile type
+	current_type = check_location(current_pos, direction)
+
+	# Check if not open
+	if current_type == world.HERO:
+		best_path_length = current_path_length
+		best_path_directions = current_path_directions
+		return
+	elif current_type == world.WALL:
+		return
+
+	# Try all directions
+	for i in DIRECTIONS:
+		if i != fposmod(direction + 2, 4): # skip if opposite direction of travel
+			current_path_directions.append(AI_DIR_ORDER[i])
+			find_path(current_pos + AI_DIR_ORDER[i], AI_DIR_ORDER[i], current_path_length + 1)
+			current_path_directions.remove(AI_DIR_ORDER[i])
+	return
 
 
 func get_ai_direction(type):
@@ -57,7 +96,7 @@ func get_ai_direction(type):
 		ai_dir_num -= i # check previous/next direction first
 		rotation += (PI / 2 * i)
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		while is_tile_open( AI_DIR_ORDER[ai_dir_num] ) == false:
+		while check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == -1:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
 			rotation -= (PI / 2 * i)
 			ai_dir_num = int( fposmod(ai_dir_num, 4) )
@@ -70,7 +109,7 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if is_tile_open( AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ):
+			if check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != -1:
 				available_dir.append( int( fposmod((ai_dir_num + turn), 4) ) )
 
 		if available_dir.size() == 0:
@@ -86,6 +125,10 @@ func get_ai_direction(type):
 		elif ai_dir_num == 2: self.set_rot(3 * PI / 2)
 		elif ai_dir_num == 3: self.set_rot(PI)
 		return AI_DIR_ORDER[ ai_dir_num ]
+
+	if type == FOLLOW:
+		# Begin search
+		find_path(current_pos, ai_dir_num, 0)
 
 
 func _fixed_process(delta):
