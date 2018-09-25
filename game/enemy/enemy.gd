@@ -46,25 +46,14 @@ func _ready():
 #	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
-func check_location(current_pos, direction):
-	# Get tile type
-	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * grid.tile_size * 2, [self], 1 )
-	if target_tile.empty():
-		return -1
-	else:
-		print(target_tile.collider.get_parent())
-		return target_tile.collider.get_parent().type()
-
-
-func find_path(current_pos, direction, current_path_length):
+func find_path(current_pos, ai_dir_num, current_path_length):
 
 	# Compare against best_path_length
 	if current_path_length >= best_path_length:
 		return
 
 	# Get current tile type
-	current_type = check_location(current_pos, direction)
+	current_type = check_location(current_pos, AI_DIR_ORDER[ai_dir_num])
 
 	# Check if not open
 	if current_type == world.HERO:
@@ -76,10 +65,10 @@ func find_path(current_pos, direction, current_path_length):
 
 	# Try all directions
 	for i in DIRECTIONS:
-		if i != fposmod(direction + 2, 4): # skip if opposite direction of travel
-			current_path_directions.append(AI_DIR_ORDER[i])
-			find_path(current_pos + AI_DIR_ORDER[i], AI_DIR_ORDER[i], current_path_length + 1)
-			current_path_directions.remove(AI_DIR_ORDER[i])
+		if i != fposmod(ai_dir_num + 2, 4): # skip if opposite direction of travel
+			current_path_directions.append( i )
+			find_path(current_pos + AI_DIR_ORDER[i], i, current_path_length + 1)
+			del current_path_directions[-1]
 	return
 
 
@@ -96,7 +85,7 @@ func get_ai_direction(type):
 		ai_dir_num -= i # check previous/next direction first
 		rotation += (PI / 2 * i)
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		while check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == -1:
+		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == -1:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
 			rotation -= (PI / 2 * i)
 			ai_dir_num = int( fposmod(ai_dir_num, 4) )
@@ -109,7 +98,7 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != -1:
+			if grid.check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != -1:
 				available_dir.append( int( fposmod((ai_dir_num + turn), 4) ) )
 
 		if available_dir.size() == 0:
@@ -129,6 +118,7 @@ func get_ai_direction(type):
 	if type == FOLLOW:
 		# Begin search
 		find_path(current_pos, ai_dir_num, 0)
+		return AI_DIR_ORDER[ best_path_directions[0] ]
 
 
 func _fixed_process(delta):

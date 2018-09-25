@@ -41,6 +41,7 @@ func update_child_pos(new_pos, direction, type):
 	var target_pos = map_to_world(new_grid_pos) + half_tile_size
 	return [ target_pos, new_grid_pos ]
 
+
 func check_location(current_pos, direction):
 	# Get tile type
 	var space_state = get_world_2d().get_direct_space_state()
