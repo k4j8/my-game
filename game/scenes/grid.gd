@@ -40,3 +40,13 @@ func update_child_pos(new_pos, direction, type):
 	var new_grid_pos = grid_pos + direction
 	var target_pos = map_to_world(new_grid_pos) + half_tile_size
 	return [ target_pos, new_grid_pos ]
+
+func check_location(current_pos, direction):
+	# Get tile type
+	var space_state = get_world_2d().get_direct_space_state()
+	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * grid.tile_size * 2, [self], 1 )
+	if target_tile.empty():
+		return -1
+	else:
+		print(target_tile.collider.get_parent())
+		return target_tile.collider.get_parent().type()
