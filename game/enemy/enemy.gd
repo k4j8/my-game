@@ -5,7 +5,6 @@ extends KinematicBody2D
 var type
 const SPEEDS = [ 50, 80, 100, 120 ] # current speed depends on level
 enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
-enum DIRECTIONS {RIGHT, DOWN, LEFT, UP} # creates dictionary with values 0 through 3
 export var AI_MOVEMENT_TYPE = LEFT
 
 # Movement
@@ -15,7 +14,6 @@ var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
 var target_direction = Vector2()
-var target_tile
 var new_grid_pos = Vector2()
 var is_moving = false
 
@@ -31,8 +29,8 @@ var available_dir = []
 var current_pos = get_pos()
 var current_type = 0
 var best_path_length = 999
-var best_path_directions = '' # list of directions
-var current_path_directions = '' # list of directions
+var best_path_directions = [] # list of directions
+var current_path_directions = [1, 2, 3, 4] # list of directions
 
 
 func _ready():
@@ -64,16 +62,17 @@ func find_path(current_pos, ai_dir_num, current_path_length):
 		return
 
 	# Try all directions
-	for i in DIRECTIONS:
+	for i in range(0, 4):
 		if i != fposmod(ai_dir_num + 2, 4): # skip if opposite direction of travel
-			current_path_directions.append( i )
+			current_path_directions.append(i)
 			find_path(current_pos + AI_DIR_ORDER[i], i, current_path_length + 1)
-			del current_path_directions[-1]
+			current_path_directions = current_path_directions # FIX update to remove last item in list
 	return
 
 
 func get_ai_direction(type):
 	# Determine how enemy should move
+
 
 	if type == LEFT or type == RIGHT:
 		# Left- or right-seeking enemies
@@ -85,12 +84,13 @@ func get_ai_direction(type):
 		ai_dir_num -= i # check previous/next direction first
 		rotation += (PI / 2 * i)
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == -1:
+		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == 1:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
 			rotation -= (PI / 2 * i)
 			ai_dir_num = int( fposmod(ai_dir_num, 4) )
 		self.set_rot(rotation)
 		return AI_DIR_ORDER[ai_dir_num]
+
 
 	if type == RAND:
 		# Picks random valid direction except backwards after each move
@@ -98,7 +98,7 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if grid.check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != -1:
+			if grid.check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != 1:
 				available_dir.append( int( fposmod((ai_dir_num + turn), 4) ) )
 
 		if available_dir.size() == 0:
@@ -114,6 +114,7 @@ func get_ai_direction(type):
 		elif ai_dir_num == 2: self.set_rot(3 * PI / 2)
 		elif ai_dir_num == 3: self.set_rot(PI)
 		return AI_DIR_ORDER[ ai_dir_num ]
+
 
 	if type == FOLLOW:
 		# Begin search

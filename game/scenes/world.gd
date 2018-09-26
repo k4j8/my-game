@@ -1,7 +1,7 @@
 # Base world to be loaded by default
 extends Node2D
 
-enum ENTITY_TYPES {WALL, HERO, ENEMY}
+enum ENTITY_TYPES {NONE, WALL, HERO, ENEMY}
 
 
 func _ready():

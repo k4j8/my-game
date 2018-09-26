@@ -13,7 +13,6 @@ var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
 var target_direction = Vector2()
-var target_tile
 var new_grid_pos = Vector2()
 var is_moving = false
 
@@ -55,11 +54,11 @@ func _fixed_process(delta):
 	# Check if tile is blocked by tilemap
 	dir_x_open = grid.check_location( get_pos(), Vector2(direction[0], 0) )
 	dir_y_open = grid.check_location( get_pos(), Vector2(0, direction[1]) )
-	if grid.check_location( get_pos(), direction ) and dir_x_open and dir_y_open: # move along an angle
+	if grid.check_location( get_pos(), direction ) != 1 and dir_x_open != 1 and dir_y_open != 1: # move along an angle
 		pass
-	elif dir_y_open: # if blocked in x-axis only, travel along y-axis
+	elif dir_y_open != 1: # if blocked in x-axis only, travel along y-axis
 		direction.x = 0
-	elif dir_x_open: # if blocked in y-axis only, travel along x-axis
+	elif dir_x_open != 1: # if blocked in y-axis only, travel along x-axis
 		direction.y = 0
 	else:
 		direction = Vector2( 0, 0 )

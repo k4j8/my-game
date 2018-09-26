@@ -8,6 +8,8 @@ onready var enemy = preload("res://enemy/enemy.tscn")
 onready var hero = preload("res://hero/hero1.tscn")
 onready var hero2 = preload("res://hero/hero2.tscn")
 
+var target_tile
+
 
 func _ready():
 	pass
@@ -45,9 +47,11 @@ func update_child_pos(new_pos, direction, type):
 func check_location(current_pos, direction):
 	# Get tile type
 	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * grid.tile_size * 2, [self], 1 )
-	if target_tile.empty():
-		return -1
-	else:
-		print(target_tile.collider.get_parent())
-		return target_tile.collider.get_parent().type()
+
+	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * tile_size * 2, [self], 1 )
+	if not target_tile.empty():
+		return 1 # FIX wall
+	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * tile_size * 2, [self], 2 )
+	if not target_tile.empty():
+		return 2 # FIX hero
+	return 0 # FIX
