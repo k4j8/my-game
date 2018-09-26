@@ -9,14 +9,14 @@ onready var hero = preload("res://hero/hero1.tscn")
 onready var hero2 = preload("res://hero/hero2.tscn")
 
 var target_tile
+var world
 
 
 func _ready():
-	pass
+	world = get_parent()
+
 
 func add_hero(pos):
-#	# Place hero in world
-
 	if not has_node("Hero 1") or not has_node("Hero 2"):
 		var new_hero
 		if not has_node("Hero 1"):
@@ -27,13 +27,6 @@ func add_hero(pos):
 			new_hero.set_name("Hero 2")
 		new_hero.set_pos(pos)
 		add_child(new_hero)
-
-#	# Place enemies in world
-#	var positions = [ Vector2(4,4) ]
-#	for pos in positions:
-#		var new_enemy = enemy.instance()
-#		new_enemy.set_pos(map_to_world(pos) + half_tile_size)
-#		add_child(new_enemy)
 
 
 func update_child_pos(new_pos, direction, type):
@@ -50,8 +43,8 @@ func check_location(current_pos, direction):
 
 	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * tile_size * 2, [self], 1 )
 	if not target_tile.empty():
-		return 1 # FIX wall
+		return world.WALL
 	target_tile = space_state.intersect_ray( current_pos, current_pos + direction * tile_size * 2, [self], 2 )
 	if not target_tile.empty():
-		return 2 # FIX hero
-	return 0 # FIX
+		return world.HERO
+	return world.NONE
