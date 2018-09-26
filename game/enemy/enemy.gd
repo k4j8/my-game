@@ -31,6 +31,7 @@ var current_type = 0
 var best_path_length = 999
 var best_path_directions = [] # list of directions
 var current_path_directions = [1, 2, 3, 4] # list of directions
+var current_path_directions_new = []
 
 
 func _ready():
@@ -66,7 +67,11 @@ func find_path(current_pos, ai_dir_num, current_path_length):
 		if i != fposmod(ai_dir_num + 2, 4): # skip if opposite direction of travel
 			current_path_directions.append(i)
 			find_path(current_pos + AI_DIR_ORDER[i], i, current_path_length + 1)
-			current_path_directions = current_path_directions # FIX update to remove last item in list
+			current_path_directions_new = []
+			for j in range(0, len(current_path_directions):
+				current_path_directions_new.append( current_path_directions[j] )
+			current_path_directions = current_path_directions_new
+			current_path_directions = current_path_directions
 	return
 
 
