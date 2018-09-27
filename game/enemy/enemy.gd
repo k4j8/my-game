@@ -21,17 +21,18 @@ var is_moving = false
 const AI_DIR_ORDER = [ Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1) ] # right, down, left, up
 var ai_dir_num = 1 # current direction as defined by an element in AI_DIR_ORDER
 var rotation = 0
-var i
 var available_dir = []
 
 # AI follower
 # Define global variables
-var current_pos = get_pos()
-var current_type = 0
+#var current_pos = get_pos()
+#var current_type = 0
 var best_path_length = 999
 var best_path_directions = [] # list of directions
-var current_path_directions = [1, 2, 3, 4] # list of directions
+var current_path_directions = [] # list of directions
 var current_path_directions_new = []
+var current_path_locations = [] # list of locations
+var current_path_locations_new = []
 
 
 func _ready():
@@ -45,14 +46,14 @@ func _ready():
 #	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
-func find_path(current_pos, ai_dir_num, current_path_length):
+func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
 	# Compare against best_path_length
 	if current_path_length >= best_path_length:
 		return
 
 	# Get current tile type
-	current_type = check_location(current_pos, AI_DIR_ORDER[ai_dir_num])
+	var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
 
 	# Check if not open
 	if current_type == world.HERO:
@@ -63,17 +64,22 @@ func find_path(current_pos, ai_dir_num, current_path_length):
 		return
 
 	# Try all directions
-	for i in range(0, 4):
-		if i != fposmod(ai_dir_num + 2, 4): # skip if opposite direction of travel
-			current_path_directions.append(i)
-			find_path(current_pos + AI_DIR_ORDER[i], i, current_path_length + 1)
+	var ai_dir_num_follow_try = 0
+	print( current_path_locations )
+	for ai_dir_num_follow_try in range(0, 4):
+		if ai_dir_num_follow_try != fposmod(ai_dir_num_follow + 2, 4): # skip if opposite direction of travel
+			current_path_directions.append(ai_dir_num_follow_try)
+			current_path_locations.append(current_pos)
+			find_path(current_pos + AI_DIR_ORDER[ai_dir_num_follow_try] * grid.tile_size * 2, ai_dir_num_follow_try, current_path_length + 1)
 
 			# Remove last entity from current_path_directions
 			current_path_directions_new = []
-			for j in range(0, len(current_path_directions) ):
+			current_path_locations_new = []
+			for j in range(0, current_path_directions.size() ):
 				current_path_directions_new.append( current_path_directions[j] )
+				current_path_locations_new.append( current_path_locations[j] )
 			current_path_directions = current_path_directions_new
-			current_path_directions = current_path_directions
+			current_path_locations = current_path_locations_new
 	return
 
 
@@ -83,6 +89,7 @@ func get_ai_direction(type):
 
 	if type == LEFT or type == RIGHT:
 		# Left- or right-seeking enemies
+		var i
 		if type == LEFT:
 			i = 1 # check previous direction in AI_DIR_ORDER then proceed forwards
 		else:
@@ -125,7 +132,11 @@ func get_ai_direction(type):
 
 	if type == FOLLOW:
 		# Begin search
-		find_path(current_pos, ai_dir_num, 0)
+#		print( get_pos() )
+		find_path( get_pos(), ai_dir_num, 0 )
+		find_path( get_pos(), fposmod(ai_dir_num + 1, 4), 0 )
+		find_path( get_pos(), fposmod(ai_dir_num + 2, 4), 0 )
+#		print(best_path_directions)
 		return AI_DIR_ORDER[ best_path_directions[0] ]
 
 
