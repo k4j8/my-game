@@ -10,6 +10,8 @@ export var AI_MOVEMENT_TYPE = LEFT
 # Movement
 var grid
 var world
+var hero1
+var hero2
 var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
@@ -25,19 +27,15 @@ var available_dir = []
 
 # AI follower
 # Define global variables
-#var current_pos = get_pos()
-#var current_type = 0
-var best_path_length = 999
-var best_path_directions = [] # list of directions
-var current_path_directions = [] # list of directions
-var current_path_directions_new = []
-var current_path_locations = [] # list of locations
-var current_path_locations_new = []
+var best_path = {}
+var current_path = {}
 
 
 func _ready():
 	grid = get_parent()
 	world = grid.get_parent()
+	hero1 = grid.get_node("Hero 1")
+	hero2 = grid.get_node("Hero 2")
 	type = world.ENEMY
 	set_fixed_process(true)
 
@@ -46,40 +44,47 @@ func _ready():
 #	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
-func find_path(current_pos, ai_dir_num_follow, current_path_length):
+func find_path(current_pos, ai_dir_num_follow, current_path['length']):
 
-	# Compare against best_path_length
-	if current_path_length >= best_path_length:
+	# Compare against best_path['length']
+	if current_path['length'] >= best_path['length']:
+		return
+
+	# Check if previously visited
+	if current_pos in current_path['location']:
 		return
 
 	# Get current tile type
 	var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
 
 	# Check if not open
-	if current_type == world.HERO:
-		best_path_length = current_path_length
-		best_path_directions = current_path_directions
-		return
 	elif current_type == world.WALL:
 		return
+	current_path['distance'] = min( abs( current_pos - hero1.get_pos() ), abs( current_pos - hero2.get_pos() ) ) # distance to hero as the crow flies
+	if best_path['distance'] > current_path['distance']: # if closer to hero than previous best (most important)
+		best_path['distance'] = current_path['distance']
+		if best_path['length'] > current_path['length']: # if path is shorter than previous best (less important)
+			best_path['length'] = current_path['length']
+			best_path['directions'] = current_path['directions']
+	return
 
 	# Try all directions
 	var ai_dir_num_follow_try = 0
-	print( current_path_locations )
+	print( current_path['locations'] )
 	for ai_dir_num_follow_try in range(0, 4):
 		if ai_dir_num_follow_try != fposmod(ai_dir_num_follow + 2, 4): # skip if opposite direction of travel
-			current_path_directions.append(ai_dir_num_follow_try)
-			current_path_locations.append(current_pos)
-			find_path(current_pos + AI_DIR_ORDER[ai_dir_num_follow_try] * grid.tile_size * 2, ai_dir_num_follow_try, current_path_length + 1)
+			current_path['directions'].append(ai_dir_num_follow_try)
+			current_path['locations'].append(current_pos)
+			find_path(current_pos + AI_DIR_ORDER[ai_dir_num_follow_try] * grid.tile_size * 2, ai_dir_num_follow_try, current_path['length'] + 1)
 
-			# Remove last entity from current_path_directions
-			current_path_directions_new = []
-			current_path_locations_new = []
-			for j in range(0, current_path_directions.size() ):
-				current_path_directions_new.append( current_path_directions[j] )
-				current_path_locations_new.append( current_path_locations[j] )
-			current_path_directions = current_path_directions_new
-			current_path_locations = current_path_locations_new
+			# Remove last entity from current_path['directions']
+			current_path['directions_new'] = []
+			current_path['locations_new'] = []
+			for j in range(0, current_path['directions'].size() ):
+				current_path['directions_new'].append( current_path['directions'][j] )
+				current_path['locations_new'].append( current_path['locations'][j] )
+			current_path['directions'] = current_path['directions_new']
+			current_path['locations'] = current_path['locations_new']
 	return
 
 
@@ -136,8 +141,10 @@ func get_ai_direction(type):
 		find_path( get_pos(), ai_dir_num, 0 )
 		find_path( get_pos(), fposmod(ai_dir_num + 1, 4), 0 )
 		find_path( get_pos(), fposmod(ai_dir_num + 2, 4), 0 )
-#		print(best_path_directions)
-		return AI_DIR_ORDER[ best_path_directions[0] ]
+#		print(best_path['directions'])
+		if best_path['directions'].size() == 0: # if dead end
+			return AI_DIR_ORDER[ ai_dir_num + 2 ] # turn around
+		return AI_DIR_ORDER[ best_path['directions'][0] ]
 
 
 func _fixed_process(delta):
