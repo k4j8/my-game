@@ -21,7 +21,6 @@ var is_moving = false
 # AI
 const AI_DIR_ORDER = [ Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1) ] # right, down, left, up
 var ai_dir_num = 1 # current direction as defined by an element in AI_DIR_ORDER
-var rotation = 0
 var available_dir = []
 
 # AI follower
@@ -35,10 +34,6 @@ func _ready():
 	world = grid.get_parent()
 	type = world.ENEMY
 	set_fixed_process(true)
-
-	# Make black dot on enemy point to direction of attempted direction instead of forwards
-#	if AI_MOVEMENT_TYPE == LEFT: rotation = PI / 2
-#	if AI_MOVEMENT_TYPE == RIGHT: rotation = -PI / 2
 
 
 func find_path(current_pos, ai_dir_num_follow, current_path_length):
@@ -104,13 +99,10 @@ func get_ai_direction(type):
 			i = -1 # check next direction in AI_DIR_ORDER then proceed backwards
 
 		ai_dir_num -= i # check previous/next direction first
-		rotation += (PI / 2 * i)
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
 		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == world.WALL:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
-			rotation -= (PI / 2 * i)
 			ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		self.set_rot(rotation)
 		return AI_DIR_ORDER[ai_dir_num]
 
 
@@ -131,10 +123,6 @@ func get_ai_direction(type):
 			ai_dir_num = available_dir[randi() % available_dir.size()]
 
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		if ai_dir_num == 0: self.set_rot(PI / 2)
-		elif ai_dir_num == 1: self.set_rot(0)
-		elif ai_dir_num == 2: self.set_rot(3 * PI / 2)
-		elif ai_dir_num == 3: self.set_rot(PI)
 		return AI_DIR_ORDER[ ai_dir_num ]
 
 
@@ -189,3 +177,7 @@ func _fixed_process(delta):
 
 		# Move
 		move(velocity)
+		if ai_dir_num == 0: self.set_rot(PI / 2)
+		elif ai_dir_num == 1: self.set_rot(0)
+		elif ai_dir_num == 2: self.set_rot(3 * PI / 2)
+		elif ai_dir_num == 3: self.set_rot(PI)
