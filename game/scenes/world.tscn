@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=1]
+[gd_scene load_steps=18 format=1]
 
 [ext_resource path="res://scenes/world.gd" type="Script" id=1]
 [ext_resource path="res://sound/reset.smp" type="Sample" id=2]
@@ -11,9 +11,10 @@
 [ext_resource path="res://hero/hero1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://hero/hero2.tscn" type="PackedScene" id=10]
 [ext_resource path="res://enemy/enemy.tscn" type="PackedScene" id=11]
-[ext_resource path="res://scenes/revive_area.gd" type="Script" id=12]
-[ext_resource path="res://scenes/revive.tex" type="Texture" id=13]
-[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=14]
+[ext_resource path="res://enemy/enemy_follow.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/revive_area.gd" type="Script" id=13]
+[ext_resource path="res://scenes/revive.tex" type="Texture" id=14]
+[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=15]
 
 [sub_resource type="SampleLibrary" id=1]
 
@@ -184,7 +185,7 @@ AI_MOVEMENT_TYPE = 2
 transform/pos = Vector2( 290, 50 )
 AI_MOVEMENT_TYPE = 1
 
-[node name="Enemy 17" parent="Grid" instance=ExtResource( 11 )]
+[node name="Enemy 17" parent="Grid" instance=ExtResource( 12 )]
 
 transform/pos = Vector2( 210, 130 )
 AI_MOVEMENT_TYPE = 3
@@ -202,7 +203,7 @@ linear_damp = 0.1
 angular_damp = 1.0
 collision/layers = 0
 collision/mask = 2
-script/script = ExtResource( 12 )
+script/script = ExtResource( 13 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -215,9 +216,9 @@ _update_shape_index = 0
 
 [node name="Sprite" type="Sprite" parent="ReviveArea"]
 
-texture = ExtResource( 13 )
+texture = ExtResource( 14 )
 
-[node name="PausePopup" parent="." instance=ExtResource( 14 )]
+[node name="PausePopup" parent="." instance=ExtResource( 15 )]
 
 visibility/visible = false
 
