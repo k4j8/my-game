@@ -10,8 +10,7 @@ export var AI_MOVEMENT_TYPE = LEFT
 # Movement
 var grid
 var world
-var hero1
-var hero2
+var heroes
 var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
@@ -34,8 +33,6 @@ var current_path = {'directions':[], 'distance':999, 'locations':[]}
 func _ready():
 	grid = get_parent()
 	world = grid.get_parent()
-	hero1 = grid.get_node("Hero 1")
-	hero2 = grid.get_node("Hero 2")
 	type = world.ENEMY
 	set_fixed_process(true)
 
@@ -58,14 +55,23 @@ func find_path(current_pos, ai_dir_num_follow, current_path_length):
 	# Get current tile type
 	var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
 
-	# Check if not open
+	# Check if wall
 	if current_type == world.WALL:
 		return
-	current_path['distance'] = min( ( current_pos - hero1.get_pos() ).length(), ( current_pos - hero2.get_pos() ).length() ) # distance to hero as the crow flies
+
+	# Calculate closest hero and record as distance
+	heroes = [ grid.find_node("Hero 1"), grid.find_node("Hero 2") ]
+	for hero in heroes:
+		if hero != null:
+			current_path['distance'] = min( current_path['distance'], (current_pos - hero.get_pos()).length() )
+
+	# Update best_path if appliciable
 	if best_path['distance'] > current_path['distance'] or ( best_path['distance'] == current_path['distance'] and best_path['length'] > current_path_length ): # if closer to hero than previous best or tied distance in a shorter path
 		best_path['directions'] = current_path['directions']
 		best_path['distance'] = current_path['distance']
 		best_path['length'] = current_path_length
+
+	# Check if hero
 	if current_type == world.HERO:
 		return
 
@@ -138,23 +144,19 @@ func get_ai_direction(type):
 
 		# Begin search
 		print(get_pos())
-		for turn in range(-1,2):
+		for turn in range(-1,2): # try turn left, go straight, and turn right
 			var ai_dir_num_initial = fposmod(ai_dir_num + turn, 4)
 			if grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num_initial] ) != world.WALL:
 				current_path['directions'] = [ai_dir_num_initial]
 				find_path( get_pos() + AI_DIR_ORDER[ai_dir_num_initial] * grid.tile_size * 2, ai_dir_num_initial, 0 ) # FIX simplify
-				print(ai_dir_num_initial)
-				print(best_path['directions'].size())
 		print('Final best path')
 		print(best_path['directions'])
-#		print('Locations visited')
-#		print(current_path['locations'])
 		if best_path['directions'].size() == 0: # if dead end
 			ai_dir_num += 2 # turn around
 		else:
 			ai_dir_num = best_path['directions'][0]
 		print('Chosen')
-		print(best_path['directions'][0])
+		print(ai_dir_num)
 		return AI_DIR_ORDER[ ai_dir_num ]
 
 
