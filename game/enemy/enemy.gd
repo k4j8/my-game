@@ -43,14 +43,13 @@ func _ready():
 
 func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
-	if current_path_length != -1:
-		# Compare against best_path to abort if best_path is better
-		if best_path['distance'] == 0 and best_path['length'] <= current_path_length:
-			return
+	# Compare against best_path to abort if best_path is better
+	if best_path['distance'] == 0 and best_path['length'] <= current_path_length:
+		return
 
-		# Check if previously visited
-		if current_pos in current_path['locations']: # FIX only true if length was less
-			return
+	# Check if previously visited
+	if current_pos in current_path['locations']: # FIX only true if length was less
+		return
 
 	# Get current tile type
 	var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
@@ -61,6 +60,7 @@ func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
 	# Calculate closest hero and record as distance
 	heroes = [ grid.find_node("Hero 1"), grid.find_node("Hero 2") ]
+	current_path['distance'] = 999
 	for hero in heroes:
 		if hero != null:
 			current_path['distance'] = min( current_path['distance'], (current_pos - hero.get_pos()).length() )
