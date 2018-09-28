@@ -13,7 +13,6 @@ var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
 var target_direction = Vector2()
-var target_tile
 var new_grid_pos = Vector2()
 var is_moving = false
 
@@ -27,13 +26,6 @@ func _ready():
 	world = grid.get_parent()
 	type = world.HERO
 	set_fixed_process(true)
-
-
-func is_tile_open(direction):
-	# Check if target tile is not blocked by tilemap
-	var space_state = get_world_2d().get_direct_space_state()
-	target_tile = space_state.intersect_ray( get_pos(), get_pos() + direction * grid.tile_size * 2, [ self ], 1 )
-	return true if target_tile.empty() else false
 
 
 func _fixed_process(delta):
@@ -60,13 +52,13 @@ func _fixed_process(delta):
 				direction.x = 1
 
 	# Check if tile is blocked by tilemap
-	dir_x_open = is_tile_open( Vector2(direction[0], 0) )
-	dir_y_open = is_tile_open( Vector2(0, direction[1]) )
-	if is_tile_open( direction ) and dir_x_open and dir_y_open: # move along an angle
+	dir_x_open = grid.check_location( get_pos(), Vector2(direction[0], 0) )
+	dir_y_open = grid.check_location( get_pos(), Vector2(0, direction[1]) )
+	if grid.check_location( get_pos(), direction ) != 1 and dir_x_open != 1 and dir_y_open != 1: # move along an angle
 		pass
-	elif dir_y_open: # if blocked in x-axis only, travel along y-axis
+	elif dir_y_open != 1: # if blocked in x-axis only, travel along y-axis
 		direction.x = 0
-	elif dir_x_open: # if blocked in y-axis only, travel along x-axis
+	elif dir_x_open != 1: # if blocked in y-axis only, travel along x-axis
 		direction.y = 0
 	else:
 		direction = Vector2( 0, 0 )
