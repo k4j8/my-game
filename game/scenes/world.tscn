@@ -107,7 +107,7 @@ __meta__ = {
 
 [node name="Hero 1" parent="Grid" instance=ExtResource( 9 )]
 
-transform/pos = Vector2( 50, 50 )
+transform/pos = Vector2( 250, 50 )
 HERO_NUM = 1
 
 [node name="Hero 2" parent="Grid" instance=ExtResource( 10 )]
@@ -186,7 +186,7 @@ AI_MOVEMENT_TYPE = 1
 
 [node name="Enemy 17" parent="Grid" instance=ExtResource( 11 )]
 
-transform/pos = Vector2( 210, 90 )
+transform/pos = Vector2( 210, 130 )
 AI_MOVEMENT_TYPE = 3
 
 [node name="ReviveArea" type="Area2D" parent="."]

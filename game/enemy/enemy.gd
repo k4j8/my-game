@@ -46,28 +46,28 @@ func _ready():
 
 func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
-	if current_path_length != 0:
+	if current_path_length != -1:
 		# Compare against best_path to abort if best_path is better
 		if best_path['distance'] == 0 and best_path['length'] <= current_path_length:
 			return
 
 		# Check if previously visited
-		if current_pos in current_path['locations']:
+		if current_pos in current_path['locations']: # FIX only true if length was less
 			return
 
-		# Get current tile type
-		var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
+	# Get current tile type
+	var current_type = grid.check_location(current_pos, AI_DIR_ORDER[fposmod(ai_dir_num_follow + 2, 4)])
 
-		# Check if not open
-		if current_type == world.WALL:
-			return
-		current_path['distance'] = min( ( current_pos - hero1.get_pos() ).length(), ( current_pos - hero2.get_pos() ).length() ) # distance to hero as the crow flies
-		if best_path['distance'] > current_path['distance'] or ( best_path['distance'] == current_path['distance'] and best_path['length'] > current_path_length ): # if closer to hero than previous best or tied distance in a shorter path
-			best_path['directions'] = current_path['directions']
-			best_path['distance'] = current_path['distance']
-			best_path['length'] = current_path_length
-		if current_type == world.HERO:
-			return
+	# Check if not open
+	if current_type == world.WALL:
+		return
+	current_path['distance'] = min( ( current_pos - hero1.get_pos() ).length(), ( current_pos - hero2.get_pos() ).length() ) # distance to hero as the crow flies
+	if best_path['distance'] > current_path['distance'] or ( best_path['distance'] == current_path['distance'] and best_path['length'] > current_path_length ): # if closer to hero than previous best or tied distance in a shorter path
+		best_path['directions'] = current_path['directions']
+		best_path['distance'] = current_path['distance']
+		best_path['length'] = current_path_length
+	if current_type == world.HERO:
+		return
 
 	# Try all directions
 	var ai_dir_num_follow_try = 0
@@ -79,7 +79,7 @@ func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
 			# Remove last entity from current_path['directions']
 			current_path['directions_new'] = []
-			for j in range(0, current_path['directions'].size() ):
+			for j in range(0, current_path['directions'].size() - 1 ):
 				current_path['directions_new'].append( current_path['directions'][j] )
 			current_path['directions'] = current_path['directions_new']
 	return
@@ -137,18 +137,25 @@ func get_ai_direction(type):
 		current_path = {'directions':[], 'distance':999, 'locations':[]}
 
 		# Begin search
-		for i in [0, 1, 3]:
-			var ai_dir_num_initial = fposmod(ai_dir_num + i, 4)
+		print(get_pos())
+		for turn in range(-1,2):
+			var ai_dir_num_initial = fposmod(ai_dir_num + turn, 4)
 			if grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num_initial] ) != world.WALL:
 				current_path['directions'] = [ai_dir_num_initial]
-				find_path( get_pos(), ai_dir_num_initial, 0 )
-#		print('Final best path')
-#		print(best_path['directions'])
+				find_path( get_pos() + AI_DIR_ORDER[ai_dir_num_initial] * grid.tile_size * 2, ai_dir_num_initial, 0 ) # FIX simplify
+				print(ai_dir_num_initial)
+				print(best_path['directions'].size())
+		print('Final best path')
+		print(best_path['directions'])
 #		print('Locations visited')
 #		print(current_path['locations'])
 		if best_path['directions'].size() == 0: # if dead end
-			return AI_DIR_ORDER[ ai_dir_num + 2 ] # turn around
-		return AI_DIR_ORDER[ best_path['directions'][0] ]
+			ai_dir_num += 2 # turn around
+		else:
+			ai_dir_num = best_path['directions'][0]
+		print('Chosen')
+		print(best_path['directions'][0])
+		return AI_DIR_ORDER[ ai_dir_num ]
 
 
 func _fixed_process(delta):
