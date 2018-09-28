@@ -47,8 +47,6 @@ func _ready():
 func find_path(current_pos, ai_dir_num_follow, current_path_length):
 
 	if current_path_length != 0:
-#		print('Current position')
-#		print( current_pos )
 		# Compare against best_path to abort if best_path is better
 		if best_path['distance'] == 0 and best_path['length'] <= current_path_length:
 			return
@@ -102,7 +100,7 @@ func get_ai_direction(type):
 		ai_dir_num -= i # check previous/next direction first
 		rotation += (PI / 2 * i)
 		ai_dir_num = int( fposmod(ai_dir_num, 4) )
-		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == 1:
+		while grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num] ) == world.WALL:
 			ai_dir_num += i # proceed forwards/backwards through AI_DIR_ORDER
 			rotation -= (PI / 2 * i)
 			ai_dir_num = int( fposmod(ai_dir_num, 4) )
@@ -116,7 +114,7 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if grid.check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != 1:
+			if grid.check_location( get_pos(), AI_DIR_ORDER[ int( fposmod(ai_dir_num + turn, 4) ) ] ) != world.WALL:
 				available_dir.append( int( fposmod((ai_dir_num + turn), 4) ) )
 
 		if available_dir.size() == 0:
@@ -135,10 +133,15 @@ func get_ai_direction(type):
 
 
 	if type == FOLLOW:
+		best_path = {'directions':[], 'distance':999, 'length':999}
+		current_path = {'directions':[], 'distance':999, 'locations':[]}
+
 		# Begin search
-		for i in range(0, 3):
-			current_path['directions'] = [ai_dir_num + i]
-			find_path( get_pos(), fposmod(ai_dir_num + i, 4), 0 )
+		for i in [0, 1, 3]:
+			var ai_dir_num_initial = fposmod(ai_dir_num + i, 4)
+			if grid.check_location( get_pos(), AI_DIR_ORDER[ai_dir_num_initial] ) != world.WALL:
+				current_path['directions'] = [ai_dir_num_initial]
+				find_path( get_pos(), ai_dir_num_initial, 0 )
 #		print('Final best path')
 #		print(best_path['directions'])
 #		print('Locations visited')
