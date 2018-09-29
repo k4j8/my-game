@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 # Properties
 var type
-const SPEEDS = [ 50, 80, 100, 120 ] # current speed depends on level
+const SPEEDS = [50, 80, 100, 120] # current speed depends on level
 enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
 export var AI_MOVEMENT_TYPE = LEFT
 
@@ -19,7 +19,7 @@ var new_grid_pos = Vector2()
 var is_moving = false
 
 # AI
-const DIR_VECTOR = [ Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1) ] # right, down, left, up
+const DIR_VECTOR = [Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1)] # right, down, left, up
 var dir = 1 # current direction as defined by an element in DIR_VECTOR
 
 # AI follower
@@ -76,23 +76,23 @@ func find_path(current_pos, dir_find_path_dir, current_path_steps):
 	# Check if previously visited
 	if current_pos not in locations_visited: # if new, initialize
 		locations_visited[current_pos] = {}
-		locations_visited[current_pos]['dir_attempts_remaining'] = range(0,4)
+		locations_visited[current_pos]['dir_attempts_remaining'] = range(0, 4)
 		locations_visited[current_pos]['steps'] = current_path_steps
 	if locations_visited[current_pos]['steps'] > current_path_steps: # found shorter path, reset locations_visited[current_pos]
-		locations_visited[current_pos]['dir_attempts_remaining'] = range(0,4)
+		locations_visited[current_pos]['dir_attempts_remaining'] = range(0, 4)
 		locations_visited[current_pos]['steps'] = current_path_steps
 	if locations_visited[current_pos]['dir_attempts_remaining'].size() == 0
 		return
 
 	# Calculate closest hero
-	heroes = [ grid.find_node("Hero 1"), grid.find_node("Hero 2") ]
+	heroes = [grid.find_node("Hero 1"), grid.find_node("Hero 2")]
 	current_path['distance'] = 999
 	for hero in heroes:
 		if hero != null:
-			current_path['distance'] = min( current_path['distance'], (current_pos - hero.get_pos()).length() )
+			current_path['distance'] = min(current_path['distance'], (current_pos - hero.get_pos()).length())
 
 	# Update best_path if applicable
-	if best_path['distance'] > current_path['distance'] or ( best_path['distance'] == current_path['distance'] and best_path['steps'] > current_path_steps ): # if closer to hero than previous best or tied distance in a shorter path
+	if best_path['distance'] > current_path['distance'] or (best_path['distance'] == current_path['distance'] and best_path['steps'] > current_path_steps): # if closer to hero than previous best or tied distance in a shorter path
 		best_path['locations'] = current_path['locations']
 		best_path['distance'] = current_path['distance']
 		best_path['steps'] = current_path_steps
@@ -111,8 +111,8 @@ func find_path(current_pos, dir_find_path_dir, current_path_steps):
 
 			# Remove last entity from current_path['locations']
 			current_path['directions_new'] = []
-			for j in range(0, current_path['locations'].size() - 1 ):
-				current_path['directions_new'].append( current_path['locations'][j] )
+			for j in range(0, current_path['locations'].size() - 1):
+				current_path['directions_new'].append(current_path['locations'][j])
 			current_path['locations'] = current_path['directions_new']
 	return
 
@@ -130,10 +130,10 @@ func get_ai_direction(type):
 			i = -1 # check next direction in DIR_VECTOR then proceed backwards
 
 		dir -= i # check previous/next direction first
-		dir = int( fposmod(dir, 4) )
-		while grid.check_location( get_pos(), DIR_VECTOR[dir] ) == world.WALL:
+		dir = int(fposmod(dir, 4))
+		while grid.check_location(get_pos(), DIR_VECTOR[dir]) == world.WALL:
 			dir += i # proceed forwards/backwards through DIR_VECTOR
-			dir = int( fposmod(dir, 4) )
+			dir = int(fposmod(dir, 4))
 		return DIR_VECTOR[dir]
 
 
@@ -143,8 +143,8 @@ func get_ai_direction(type):
 		# Populate available_dir with valid (non-blocked) directions
 		var available_dir = []
 		for turn in range(-1,2): # try turn left, go straight, and turn right
-			if grid.check_location( get_pos(), DIR_VECTOR[ int( fposmod(dir + turn, 4) ) ] ) != world.WALL:
-				available_dir.append( int( fposmod((dir + turn), 4) ) )
+			if grid.check_location(get_pos(), DIR_VECTOR[int(fposmod(dir + turn, 4))]) != world.WALL:
+				available_dir.append(int(fposmod((dir + turn), 4)))
 
 		if available_dir.size() == 0:
 			# If no directions found, turn around
@@ -153,8 +153,8 @@ func get_ai_direction(type):
 			# If directions found, select one at random
 			dir = available_dir[randi() % available_dir.size()]
 
-		dir = int( fposmod(dir, 4) )
-		return DIR_VECTOR[ dir ]
+		dir = int(fposmod(dir, 4))
+		return DIR_VECTOR[dir]
 
 
 	if type == FOLLOW:
@@ -168,7 +168,7 @@ func get_ai_direction(type):
 			var dir_initial = fposmod(dir + turn, 4)
 			if grid.check_location( get_pos(), DIR_VECTOR[dir_initial] ) != world.WALL:
 				current_path['locations'] = [dir_initial]
-				find_path( get_pos() + DIR_VECTOR[dir_initial] * grid.tile_size * 2, dir_initial, 0 ) # FIX simplify
+				find_path(get_pos() + DIR_VECTOR[dir_initial] * grid.tile_size * 2, dir_initial, 0)
 		print('Final best path')
 		print(best_path['locations'])
 		if best_path['locations'].size() == 0: # if dead end
@@ -177,13 +177,13 @@ func get_ai_direction(type):
 			dir = best_path['locations'][0]
 		print('Chosen')
 		print(dir)
-		return DIR_VECTOR[ dir ]
+		return DIR_VECTOR[dir]
 
 
 func _fixed_process(delta):
 
 	if not is_moving:
-		direction = get_ai_direction( AI_MOVEMENT_TYPE )
+		direction = get_ai_direction(AI_MOVEMENT_TYPE)
 
 		# Initialize moving
 		target_direction = direction.normalized()

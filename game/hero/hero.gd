@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 # Properties
 var type
-const SPEEDS = [ 250, 300, 325, 350 ] # current speed depends on level
+const SPEEDS = [250, 300, 325, 350] # current speed depends on level
 export var HERO_NUM = 1
 
 # Movement
@@ -52,16 +52,16 @@ func _fixed_process(delta):
 				direction.x = 1
 
 	# Check if tile is blocked by tilemap
-	dir_x_open = grid.check_location( get_pos(), Vector2(direction[0], 0) )
-	dir_y_open = grid.check_location( get_pos(), Vector2(0, direction[1]) )
-	if grid.check_location( get_pos(), direction ) != 1 and dir_x_open != 1 and dir_y_open != 1: # move along an angle
+	dir_x_open = grid.check_location(get_pos(), Vector2(direction[0], 0))
+	dir_y_open = grid.check_location(get_pos(), Vector2(0, direction[1]))
+	if grid.check_location(get_pos(), direction) != 1 and dir_x_open != 1 and dir_y_open != 1: # move along an angle
 		pass
 	elif dir_y_open != 1: # if blocked in x-axis only, travel along y-axis
 		direction.x = 0
 	elif dir_x_open != 1: # if blocked in y-axis only, travel along x-axis
 		direction.y = 0
 	else:
-		direction = Vector2( 0, 0 )
+		direction = Vector2(0, 0)
 
 	if not is_moving and direction != Vector2():
 
@@ -70,12 +70,12 @@ func _fixed_process(delta):
 		var target_arr = grid.update_child_pos(get_pos(), direction * 2, type)
 		target_pos = target_arr[0]
 		new_grid_pos = target_arr[1]
-#		print( "Hero position: ", new_grid_pos )
+#		print("Hero position: ", new_grid_pos)
 		is_moving = true
 
 	elif is_moving:
 
-		var speed = SPEEDS[ get_node("/root/global").level % 4 ]
+		var speed = SPEEDS[get_node("/root/global").level % 4]
 
 		# Prepare to stop moving if target will be reached
 		var move_distance = velocity.length() * 2
