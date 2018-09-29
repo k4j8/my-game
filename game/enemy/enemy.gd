@@ -74,14 +74,16 @@ func find_path(current_pos, dir_find_path_dir, current_path_steps):
 		return
 
 	# Check if previously visited
-	if current_pos not in locations_visited: # if new, initialize
+	if current_pos in locations_visited.keys(): # if new, initialize
+		pass
+	else:
 		locations_visited[current_pos] = {}
 		locations_visited[current_pos]['dir_attempts_remaining'] = range(0, 4)
 		locations_visited[current_pos]['steps'] = current_path_steps
 	if locations_visited[current_pos]['steps'] > current_path_steps: # found shorter path, reset locations_visited[current_pos]
 		locations_visited[current_pos]['dir_attempts_remaining'] = range(0, 4)
 		locations_visited[current_pos]['steps'] = current_path_steps
-	if locations_visited[current_pos]['dir_attempts_remaining'].size() == 0
+	if locations_visited[current_pos]['dir_attempts_remaining'].size() == 0:
 		return
 
 	# Calculate closest hero
@@ -175,8 +177,6 @@ func get_ai_direction(type):
 			dir += 2 # turn around
 		else:
 			dir = best_path['locations'][0]
-		print('Chosen')
-		print(dir)
 		return DIR_VECTOR[dir]
 
 
