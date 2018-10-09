@@ -24,8 +24,8 @@ var dir = 1 # current direction as defined by an element in DIR_VECTOR
 
 # AI follower
 # Define global variables
-var best_path = {'directions':[], 'distance':999, 'steps':999}
-var current_path = {'directions':[], 'distance':999}
+var best_path = {'directions':[], 'distance':999999, 'steps':999999}
+var current_path = {'directions':[], 'distance':999999}
 var locations_visited = {}
 
 
@@ -115,16 +115,17 @@ func find_path(current_pos, dir_find_path_current, current_path_steps):
 		dir_find_path_attempts.append(i)
 
 	for dir_find_path_attempt in dir_find_path_attempts:
-		if dir_find_path_attempt != fposmod(dir_find_path_current + 2, 4): # skip if opposite direction of travel
-			current_path['directions'].append(dir_find_path_attempt)
-			locations_visited[current_pos]['dir_attempts_remaining'].erase(dir_find_path_attempt)
-			find_path(current_pos + DIR_VECTOR[dir_find_path_attempt] * grid.tile_size * 2, dir_find_path_attempt, current_path_steps + 1)
+		if dir_find_path_attempt == fposmod(dir_find_path_current + 2, 4): # skip if opposite direction of travel
+			continue
+		current_path['directions'].append(dir_find_path_attempt)
+		locations_visited[current_pos]['dir_attempts_remaining'].erase(dir_find_path_attempt)
+		find_path(current_pos + DIR_VECTOR[dir_find_path_attempt] * grid.tile_size * 2, dir_find_path_attempt, current_path_steps + 1)
 
-			# Remove last entity from current_path['directions']
-			current_path['directions_new'] = []
-			for j in range(0, current_path['directions'].size() - 1):
-				current_path['directions_new'].append(current_path['directions'][j])
-			current_path['directions'] = current_path['directions_new']
+		# Remove last entity from current_path['directions']
+		current_path['directions_new'] = []
+		for j in range(0, current_path['directions'].size() - 1):
+			current_path['directions_new'].append(current_path['directions'][j])
+		current_path['directions'] = current_path['directions_new']
 	return
 
 
@@ -169,8 +170,8 @@ func get_ai_direction(type):
 
 
 	if type == FOLLOW:
-		best_path = {'directions':[], 'distance':999, 'steps':999}
-		current_path = {'directions':[], 'distance':999}
+		best_path = {'directions':[], 'distance':99999, 'steps':99999}
+		current_path = {'directions':[], 'distance':99999}
 		locations_visited = {}
 
 		# Begin search
@@ -183,7 +184,7 @@ func get_ai_direction(type):
 		print('Best path: ', best_path['directions'])
 		print('Best distance: ', best_path['distance'])
 		if best_path['directions'].size() == 0: # if dead end
-			dir += 2 # turn around
+			dir = fposmod(dir + 2, 4) # turn around
 		else:
 			dir = best_path['directions'][0]
 		return DIR_VECTOR[dir]
