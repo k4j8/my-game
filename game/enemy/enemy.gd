@@ -107,8 +107,13 @@ func find_path(current_pos, dir_find_path_current, current_path_steps):
 	if current_tile_type == world.HERO:
 		return
 
+
 	# Try all directions
-	var dir_find_path_attempts = locations_visited[current_pos]['dir_attempts_remaining']
+
+	var dir_find_path_attempts = []
+	for i in locations_visited[current_pos]['dir_attempts_remaining']:
+		dir_find_path_attempts.append(i)
+
 	for dir_find_path_attempt in dir_find_path_attempts:
 		if dir_find_path_attempt != fposmod(dir_find_path_current + 2, 4): # skip if opposite direction of travel
 			current_path['directions'].append(dir_find_path_attempt)
