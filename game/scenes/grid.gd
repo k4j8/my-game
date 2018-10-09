@@ -21,7 +21,7 @@ func add_hero(pos):
 		var new_hero
 		if not has_node("Hero 1"):
 			new_hero = hero.instance()
-			new_hero.set_name("Hero")
+			new_hero.set_name("Hero 1")
 		elif not has_node("Hero 2"):
 			new_hero = hero2.instance()
 			new_hero.set_name("Hero 2")
