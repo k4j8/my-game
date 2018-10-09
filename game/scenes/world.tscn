@@ -118,77 +118,94 @@ transform/pos = Vector2( 450, 290 )
 [node name="Enemy" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 90, 90 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 2" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 90, 170 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 3" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 170, 90 )
 AI_MOVEMENT_TYPE = 1
+AI_PATROL_PATH = 0
 
 [node name="Enemy 4" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 50, 170 )
 AI_MOVEMENT_TYPE = 2
+AI_PATROL_PATH = 0
 
 [node name="Enemy 5" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 210, 290 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 6" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 210, 330 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 7" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 210, 370 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 8" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 130, 290 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 9" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 170, 370 )
 AI_MOVEMENT_TYPE = 1
+AI_PATROL_PATH = 0
 
 [node name="Enemy 10" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 90, 270 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 11" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 370, 330 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 12" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 290, 330 )
 AI_MOVEMENT_TYPE = 2
+AI_PATROL_PATH = 0
 
 [node name="Enemy 13" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 330, 250 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 14" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 410, 250 )
+AI_PATROL_PATH = 0
 
 [node name="Enemy 15" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 370, 70 )
 AI_MOVEMENT_TYPE = 2
+AI_PATROL_PATH = 0
 
 [node name="Enemy 16" parent="Grid" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 290, 50 )
-AI_MOVEMENT_TYPE = 1
+AI_MOVEMENT_TYPE = 4
+AI_PATROL_PATH = 0
 
 [node name="Enemy 17" parent="Grid" instance=ExtResource( 12 )]
 
 transform/pos = Vector2( 250, 50 )
 AI_MOVEMENT_TYPE = 3
+AI_PATROL_PATH = 0
 
 [node name="ReviveArea" type="Area2D" parent="."]
 

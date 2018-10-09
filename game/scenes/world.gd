@@ -2,6 +2,7 @@
 extends Node2D
 
 enum ENTITY_TYPES {NONE, WALL, HERO, ENEMY}
+var steps = 0 # number of steps taken by enemies
 
 
 func _ready():

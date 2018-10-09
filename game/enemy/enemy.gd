@@ -4,8 +4,9 @@ extends KinematicBody2D
 # Properties
 var type
 const SPEEDS = [50, 80, 100, 120] # current speed depends on level
-enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW}
+enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW, PATROL}
 export var AI_MOVEMENT_TYPE = LEFT
+export var AI_PATROL_PATH = 0
 
 # Movement
 var grid
@@ -170,9 +171,12 @@ func get_ai_direction(type):
 
 
 	if type == FOLLOW:
+		# Takes shortest path to closest hero
+
 		best_path = {'directions':[], 'distance':99999, 'steps':99999}
 		current_path = {'directions':[], 'distance':99999}
 		locations_visited = {}
+		world.steps += 1
 
 		# Begin search
 		print(get_pos())
@@ -190,6 +194,13 @@ func get_ai_direction(type):
 		return DIR_VECTOR[dir]
 
 
+	if type == PATROL:
+		# Follows path defined by AI_PATROL_PATHS on global and AI_PATROL_PATH
+
+		var path = global.AI_PATROL_PATHS[AI_PATROL_PATH]
+		dir = path[fposmod(world.steps, path.size())]
+		return DIR_VECTOR[dir]
+
 func _fixed_process(delta):
 
 	if not is_moving:
@@ -204,7 +215,7 @@ func _fixed_process(delta):
 
 	elif is_moving:
 
-		var speed = SPEEDS[ get_node("/root/global").level % 4 ]
+		var speed = SPEEDS[ global.level % 4 ]
 
 		# Prepare to stop moving if target will be reached
 		var move_distance = velocity.length() * 2
