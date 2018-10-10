@@ -16,7 +16,7 @@ var direction = Vector2()
 var velocity = Vector2()
 var target_pos = Vector2()
 var target_direction = Vector2()
-var new_grid_pos = Vector2()
+#var new_grid_pos = Vector2()
 var is_moving = false
 
 # AI
@@ -130,14 +130,14 @@ func find_path(current_pos, dir_find_path_current, current_path_steps):
 	return
 
 
-func get_ai_direction(type):
+func get_ai_direction():
 	# Determine how enemy should move
 
 
-	if type == LEFT or type == RIGHT:
+	if AI_MOVEMENT_TYPE == LEFT or AI_MOVEMENT_TYPE == RIGHT:
 		# Left- or right-seeking enemies
 		var i
-		if type == LEFT:
+		if AI_MOVEMENT_TYPE == LEFT:
 			i = 1 # check previous direction in DIR_VECTOR then proceed forwards
 		else:
 			i = -1 # check next direction in DIR_VECTOR then proceed backwards
@@ -150,7 +150,7 @@ func get_ai_direction(type):
 		return DIR_VECTOR[dir]
 
 
-	if type == RAND:
+	if AI_MOVEMENT_TYPE == RAND:
 		# Picks random valid direction except backwards after each move
 
 		# Populate available_dir with valid (non-blocked) directions
@@ -170,7 +170,7 @@ func get_ai_direction(type):
 		return DIR_VECTOR[dir]
 
 
-	if type == FOLLOW:
+	if AI_MOVEMENT_TYPE == FOLLOW:
 		# Takes shortest path to closest hero
 
 		best_path = {'directions':[], 'distance':99999, 'steps':99999}
@@ -182,7 +182,7 @@ func get_ai_direction(type):
 		print(get_pos())
 		for turn in range(-1,2): # try turn left, go straight, and turn right
 			var dir_initial = fposmod(dir + turn, 4)
-			if grid.check_location( get_pos(), DIR_VECTOR[dir_initial] ) != world.WALL:
+			if grid.check_location(get_pos(), DIR_VECTOR[dir_initial]) != world.WALL:
 				current_path['directions'] = [dir_initial]
 				find_path(get_pos() + DIR_VECTOR[dir_initial] * grid.tile_size * 2, dir_initial, 0)
 		print('Best path: ', best_path['directions'])
@@ -194,28 +194,29 @@ func get_ai_direction(type):
 		return DIR_VECTOR[dir]
 
 
-	if type == PATROL:
+	if AI_MOVEMENT_TYPE == PATROL:
 		# Follows path defined by AI_PATROL_PATHS on global and AI_PATROL_PATH
 
 		var path = global.AI_PATROL_PATHS[AI_PATROL_PATH]
 		dir = path[fposmod(world.steps, path.size())]
 		return DIR_VECTOR[dir]
 
+
 func _fixed_process(delta):
 
 	if not is_moving:
-		direction = get_ai_direction(AI_MOVEMENT_TYPE)
+		direction = get_ai_direction()
 
 		# Initialize moving
 		target_direction = direction.normalized()
 		var target_arr = grid.update_child_pos(get_pos(), direction * 2, type)
 		target_pos = target_arr[0]
-		new_grid_pos = target_arr[1]
+#		new_grid_pos = target_arr[1]
 		is_moving = true
 
 	elif is_moving:
 
-		var speed = SPEEDS[ global.level % 4 ]
+		var speed = SPEEDS[global.level % 4]
 
 		# Prepare to stop moving if target will be reached
 		var move_distance = velocity.length() * 2
