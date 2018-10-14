@@ -6,8 +6,8 @@
 [ext_resource path="res://sound/win.smp" type="Sample" id=4]
 [ext_resource path="res://sound/sound.gd" type="Script" id=5]
 [ext_resource path="res://scenes/win_area.gd" type="Script" id=6]
-[ext_resource path="res://scenes/ai.gd" type="Script" id=7]
-[ext_resource path="res://scenes/instructor.gd" type="Script" id=8]
+[ext_resource path="res://ai/ai.gd" type="Script" id=7]
+[ext_resource path="res://ai/instructor.gd" type="Script" id=8]
 [ext_resource path="res://tilemap/tileset.tres" type="TileSet" id=9]
 [ext_resource path="res://scenes/grid.gd" type="Script" id=10]
 [ext_resource path="res://hero/hero1.tscn" type="PackedScene" id=11]
@@ -15,8 +15,9 @@
 [ext_resource path="res://enemy/enemy.tscn" type="PackedScene" id=13]
 [ext_resource path="res://enemy/enemy_follow.tscn" type="PackedScene" id=14]
 [ext_resource path="res://scenes/revive_area.gd" type="Script" id=15]
-[ext_resource path="res://scenes/revive.tex" type="Texture" id=16]
-[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=17]
+[ext_resource path="res://scenes/pause_popup.tscn" type="PackedScene" id=16]
+
+
 
 [sub_resource type="SampleLibrary" id=1]
 
@@ -43,6 +44,15 @@ samples/win = {
 
 custom_solver_bias = 0.0
 extents = Vector2( 10, 10 )
+
+[sub_resource type="ImageTexture" id=3]
+
+resource/name = "revive.png"
+flags = 7
+image = Image( 32, 32, 5, BC1, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 231, 57, 255, 255, 85, 85, 85, 21, 4, 33, 255, 255, 85, 85, 85, 0, 4, 33, 255, 255, 85, 85, 85, 0, 113, 140, 255, 255, 85, 85, 85, 84, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 255, 255, 0, 0, 128, 128, 112, 90, 0, 0, 239, 123, 21, 0, 0, 0, 236, 98, 0, 0, 85, 85, 85, 37, 236, 98, 0, 0, 85, 85, 85, 92, 117, 173, 0, 0, 43, 149, 85, 85, 255, 255, 0, 0, 0, 0, 11, 45, 0, 0, 255, 255, 85, 85, 85, 85, 231, 57, 255, 255, 85, 85, 85, 21, 0, 0, 239, 123, 1, 1, 1, 0, 0, 0, 223, 255, 0, 128, 64, 88, 255, 255, 0, 0, 37, 10, 0, 0, 255, 255, 0, 0, 92, 168, 0, 0, 125, 239, 0, 0, 85, 87, 86, 112, 0, 0, 251, 222, 64, 64, 64, 0, 113, 140, 255, 255, 85, 85, 85, 84, 4, 33, 255, 255, 21, 21, 21, 21, 236, 98, 0, 0, 85, 85, 149, 21, 255, 255, 0, 0, 9, 9, 2, 0, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 255, 255, 0, 0, 112, 112, 224, 128, 0, 0, 0, 0, 0, 0, 0, 0, 239, 123, 255, 255, 84, 84, 84, 84, 4, 33, 255, 255, 21, 21, 21, 21, 236, 98, 0, 0, 21, 213, 85, 85, 255, 255, 0, 0, 0, 11, 9, 9, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 255, 255, 0, 0, 128, 224, 112, 112, 0, 0, 0, 0, 0, 0, 0, 0, 239, 123, 255, 255, 84, 84, 84, 84, 113, 140, 255, 255, 21, 85, 85, 85, 117, 173, 0, 0, 87, 86, 86, 88, 125, 239, 0, 0, 45, 21, 213, 85, 255, 255, 0, 0, 0, 0, 47, 181, 255, 255, 0, 0, 0, 0, 248, 94, 247, 189, 0, 0, 88, 86, 85, 85, 93, 239, 0, 0, 213, 21, 21, 61, 247, 189, 255, 255, 84, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 255, 255, 0, 0, 112, 224, 128, 0, 0, 0, 251, 222, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 239, 0, 0, 85, 213, 213, 3, 255, 255, 0, 0, 9, 2, 0, 0, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 113, 140, 255, 255, 21, 85, 85, 85, 239, 123, 255, 255, 0, 85, 85, 85, 239, 123, 255, 255, 0, 85, 85, 85, 247, 189, 255, 255, 84, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 0, 0, 255, 255, 85, 85, 85, 85, 255, 255, 134, 49, 0, 0, 128, 96, 255, 255, 0, 0, 0, 168, 87, 85, 255, 255, 0, 0, 0, 10, 245, 85, 170, 82, 255, 255, 85, 85, 85, 84, 255, 255, 0, 0, 112, 88, 88, 88, 255, 255, 0, 0, 53, 9, 3, 0, 255, 255, 0, 0, 94, 96, 64, 128, 255, 255, 0, 0, 13, 13, 37, 37, 255, 255, 0, 0, 88, 88, 112, 112, 255, 255, 0, 0, 2, 3, 9, 149, 0, 0, 255, 255, 149, 21, 37, 2, 255, 255, 0, 0, 37, 37, 13, 9, 170, 82, 255, 255, 21, 85, 85, 85, 255, 255, 0, 0, 85, 95, 160, 0, 255, 255, 0, 0, 85, 181, 10, 0, 48, 132, 255, 255, 84, 85, 85, 85, 255, 255, 65, 8, 128, 88, 180, 38, 255, 255, 0, 0, 2, 37, 62, 24, 255, 255, 0, 0, 38, 180, 120, 0, 255, 255, 0, 0, 24, 54, 13, 0, 190, 247, 174, 115, 20, 125, 125, 20, 52, 165, 20, 165, 171, 162, 170, 170, 0, 0, 0, 0, 255, 255, 255, 255 )
+size = Vector2( 20, 20 )
+storage = 0
+lossy_quality = 0.7
 
 [node name="World" type="Node2D"]
 
@@ -211,7 +221,7 @@ AI_PATROL_PATH = 0
 
 [node name="Enemy 17" parent="Grid" instance=ExtResource( 14 )]
 
-transform/pos = Vector2( 250, 50 )
+transform/pos = Vector2( 170, 330 )
 AI_MOVEMENT_TYPE = 3
 AI_PATROL_PATH = 0
 
@@ -241,9 +251,9 @@ _update_shape_index = 0
 
 [node name="Sprite" type="Sprite" parent="ReviveArea"]
 
-texture = ExtResource( 16 )
+texture = SubResource( 3 )
 
-[node name="PausePopup" parent="." instance=ExtResource( 17 )]
+[node name="PausePopup" parent="." instance=ExtResource( 16 )]
 
 visibility/visible = false
 
