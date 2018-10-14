@@ -7,7 +7,7 @@ enum AI_MOVEMENT_TYPES {LEFT, RIGHT, RAND, FOLLOW, PATROL}
 var grid
 var world
 var instructor
-var heroes
+var heroes = {} # example: heroes[2]['node'] and heroes[2]['position']
 
 # AI
 const DIR_VECTOR = [Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1)] # right, down, left, up
@@ -26,6 +26,7 @@ var locations_visited = {}
 # best_path['directions'] = directions in the form of integers in order
 # best_path['distance'] = distance to hero at end of locations
 # best_path['steps'] = number of moves in locations
+# best_path['hero'] = hero number of best_path hero
 
 # locations_visited[current_pos]['dir_attempts_remaining'] = directions untried at this position
 # locations_visited[current_pos]['steps'] = number of steps to get o this position
@@ -53,7 +54,7 @@ func _ready():
 func find_path(current_pos, dir_find_path_current, current_path_steps, dir):
 
 	# If path to hero has already been found, abort if that path is shorter than current
-	if best_path['distance'] == 0 and best_path['steps'] <= current_path_steps:
+	if best_path['distance'] < grid.tile_size[0] and best_path['steps'] <= current_path_steps:
 		return
 
 	# Get current tile type
@@ -77,23 +78,28 @@ func find_path(current_pos, dir_find_path_current, current_path_steps, dir):
 		return
 
 	# Calculate closest hero
-	heroes = [grid.find_node("Hero 1"), grid.find_node("Hero 2")]
-	current_path['distance'] = 999
+	current_path['distance'] = 999999
+	var closest_hero = 0
 	for hero in heroes:
-		if hero != null:
-			current_path['distance'] = min(current_path['distance'], (current_pos - hero.get_pos()).length())
-#			print('Current:', current_pos)
-#			print('Hero:', hero.get_pos())
-#			print('Distance:', (current_pos - hero.get_pos()).length())
+		var distance_to_hero = (current_pos - heroes[hero]['position']).length()
+		if current_path['distance'] > distance_to_hero:
+			current_path['distance'] = distance_to_hero
+			closest_hero = hero
 
 	# Update best_path if applicable
-	if best_path['distance'] > current_path['distance'] or (best_path['distance'] == current_path['distance'] and best_path['steps'] > current_path_steps): # if closer to hero than previous best or tied distance in a shorter path
+	if current_path['distance'] < grid.tile_size[0]: # if hero is reachable
 		best_path['directions'] = current_path['directions']
 		best_path['distance'] = current_path['distance']
 		best_path['steps'] = current_path_steps
+		best_path['hero'] = closest_hero
+	elif best_path['distance'] > current_path['distance']: # if hero was not reachable, use closest hero
+		best_path['directions'] = current_path['directions']
+		best_path['distance'] = current_path['distance']
+		best_path['steps'] = current_path_steps
+		best_path['hero'] = closest_hero
 
-	# Check if current_tile_type is a hero
-	if current_tile_type == world.HERO:
+	# Check if hero was reached
+	if current_path['distance'] < grid.tile_size[0]:
 		return
 
 
@@ -161,6 +167,17 @@ func get_ai_direction(enemy, dir):
 	if enemy.AI_MOVEMENT_TYPE == FOLLOW:
 		# Takes shortest path to closest hero
 
+		heroes[1] = {}
+		heroes[1]['node'] = grid.find_node("Hero 1")
+		heroes[1]['position'] = Vector2(99999, 99999)
+		heroes[2] = {}
+		heroes[2]['node'] = grid.find_node("Hero 2")
+		heroes[2]['position'] = Vector2(99999, 99999)
+		for hero in heroes:
+			if heroes[hero]['node'] != null:
+				heroes[hero]['position'] = heroes[hero]['node'].get_pos()
+		print(heroes)
+
 		best_path = {'directions':[], 'distance':99999, 'steps':99999}
 		current_path = {'directions':[], 'distance':99999}
 		locations_visited = {}
@@ -173,7 +190,8 @@ func get_ai_direction(enemy, dir):
 				current_path['directions'] = [dir_initial]
 				find_path(enemy.target_pos + DIR_VECTOR[dir_initial] * grid.tile_size * 2, dir_initial, 0, dir)
 		print('Best path: ', best_path['directions'])
-		print('Best distance: ', best_path['distance'])
+		print('Best distance: ', best_path['distance'], ' (Hero ', best_path['hero'], ')')
+		print(' ')
 		if best_path['directions'].size() == 0: # if dead end
 			dir = fposmod(dir + 2, 4) # turn around
 		else:
