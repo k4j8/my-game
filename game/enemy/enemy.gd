@@ -208,7 +208,11 @@ func get_ai_direction():
 func _fixed_process(delta):
 
 	if not is_moving:
-		direction = get_ai_direction()
+		if self in instructor.instructions:
+			dir = instructor.instructions[self]['dir']
+		else: # for first movement before instructor has loaded
+			dir = 1
+		direction = DIR_VECTOR[dir]
 
 		# Initialize moving
 		target_direction = direction.normalized()
