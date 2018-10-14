@@ -22,6 +22,7 @@ var is_moving = false
 # AI
 const DIR_VECTOR = [Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0), Vector2(0, -1)] # right, down, left, up
 var dir = 1 # current direction as defined by an element in DIR_VECTOR
+var steps = 0
 
 # AI follower
 # Define global variables
@@ -176,7 +177,6 @@ func get_ai_direction():
 		best_path = {'directions':[], 'distance':99999, 'steps':99999}
 		current_path = {'directions':[], 'distance':99999}
 		locations_visited = {}
-		world.steps += 1
 
 		# Begin search
 		print(get_pos())
@@ -198,7 +198,7 @@ func get_ai_direction():
 		# Follows path defined by AI_PATROL_PATHS on global and AI_PATROL_PATH
 
 		var path = global.AI_PATROL_PATHS[AI_PATROL_PATH]
-		dir = path[fposmod(world.steps, path.size())]
+		dir = path[fposmod(steps, path.size())]
 		return DIR_VECTOR[dir]
 
 
@@ -212,6 +212,7 @@ func _fixed_process(delta):
 		var target_arr = grid.update_child_pos(get_pos(), direction * 2, type)
 		target_pos = target_arr[0]
 #		new_grid_pos = target_arr[1]
+		steps += 1
 		is_moving = true
 
 	elif is_moving:
