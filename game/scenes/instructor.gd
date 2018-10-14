@@ -27,7 +27,6 @@ func give_instructions():
 	# Search for new enemies in enemies variable and add to instructions if found
 	for enemy in enemies:
 		if not enemy in instructions.keys():
-			instructions[enemy] = 0
-
-		if enemy.steps > 0:
-			print('Enemy ',enemy, ' has taken ', enemy.steps, ' steps')
+			instructions[enemy] = {}
+			instructions[enemy]['steps'] = 0
+		instructions[enemy]['dir'] = 0 # placeholder for directions
