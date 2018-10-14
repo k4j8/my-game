@@ -11,6 +11,7 @@ export var AI_PATROL_PATH = 0
 # Movement
 var grid
 var world
+var instructor
 var heroes
 var direction = Vector2()
 var velocity = Vector2()
@@ -59,6 +60,8 @@ var locations_visited = {}
 func _ready():
 	grid = get_parent()
 	world = grid.get_parent()
+	instructor = world.get_node("Instructor")
+	instructor.enemies.append(self)
 	type = world.ENEMY
 	set_fixed_process(true)
 
