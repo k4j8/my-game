@@ -7,12 +7,13 @@ var ai
 var enemies = [] # list of all enemies populated by the enemies themselves
 var instructions = {} # dictionary with keys matching enemies and values equal to the number of instructions provided
 var _timer = null
+var thread = null
 
 
 func _ready():
 	grid = get_node("../Grid")
 	ai = get_node("../AI")
-	give_instructions()
+	give_instructions('blank')
 
 	_timer = Timer.new()
 	add_child(_timer)
@@ -24,10 +25,13 @@ func _ready():
 
 
 func _on_Timer_timeout():
-	give_instructions()
+	thread = Thread.new()
+	thread.start(self, "give_instructions", 'blank', 0)
+	thread.wait_to_finish()
 
 
-func give_instructions():
+func give_instructions(blank):
+	print('running give_instructions')
 	for enemy in enemies:
 
 		# Search for new enemies in enemies variable and add to instructions if found
