@@ -15,23 +15,15 @@ func _ready():
 	ai = get_node("../AI")
 	give_instructions('blank')
 
-	_timer = Timer.new()
-	add_child(_timer)
 
-	_timer.connect("timeout", self, "_on_Timer_timeout")
-	_timer.set_wait_time(0.3)
-	_timer.set_one_shot(false) # make sure it loops
-	_timer.start()
-
-
-func _on_Timer_timeout():
+func start_instructor():
 	thread = Thread.new()
 	thread.start(self, "give_instructions", 'blank', 0)
 	thread.wait_to_finish()
 
-
 func give_instructions(blank):
-	print('running give_instructions')
+	#print('running give_instructions')
+	#print(enemies.size())
 	for enemy in enemies:
 
 		# Search for new enemies in enemies variable and add to instructions if found

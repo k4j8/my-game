@@ -176,26 +176,27 @@ func get_ai_direction(enemy, dir):
 		for hero in heroes:
 			if heroes[hero]['node'] != null:
 				heroes[hero]['position'] = heroes[hero]['node'].get_pos()
-		print(heroes)
+		#print(heroes)
 
 		best_path = {'directions':[], 'distance':99999, 'steps':99999}
 		current_path = {'directions':[], 'distance':99999}
 		locations_visited = {}
 
 		# Begin search
-		print('Follower position: ', enemy.target_pos)
+		#print('Follower position: ', enemy.target_pos)
 		for turn in range(-1,2): # try turn left, go straight, and turn right
 			var dir_initial = fposmod(dir + turn, 4)
 			if grid.check_location(enemy.target_pos, DIR_VECTOR[dir_initial]) != world.WALL:
 				current_path['directions'] = [dir_initial]
 				find_path(enemy.target_pos + DIR_VECTOR[dir_initial] * grid.tile_size * 2, dir_initial, 0, dir)
-		print('Best path: ', best_path['directions'])
-		print('Best distance: ', best_path['distance'], ' (Hero ', best_path['hero'], ')')
-		print(' ')
+		#print('Best path: ', best_path['directions'])
+		#print('Best distance: ', best_path['distance'], ' (Hero ', best_path['hero'], ')')
+		#print(' ')
 		if best_path['directions'].size() == 0: # if dead end
 			dir = fposmod(dir + 2, 4) # turn around
 		else:
 			dir = best_path['directions'][0]
+		instructor.start_instructor()
 		return dir
 
 
