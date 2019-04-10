@@ -40,12 +40,15 @@ func _fixed_process(delta):
 
 	if not is_moving:
 		if self in instructor.instructions and (instructor.instructions[self]['steps'] > 1):
+			# Get instructions from instructor
 			if AI_MOVEMENT_TYPE == 3:
 				print(instructor.instructions[self])
 			dir = instructor.instructions[self]['dir']
-		else: # for first movement before instructor has loaded
+		else:
+			# For first movement before instructor has loaded
 			dir = ai.get_ai_direction(self, dir)
 		direction = ai.DIR_VECTOR[dir]
+		instructor.start_instructor()
 
 		# Initialize moving
 		target_direction = direction.normalized()

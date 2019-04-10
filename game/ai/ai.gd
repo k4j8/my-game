@@ -196,7 +196,6 @@ func get_ai_direction(enemy, dir):
 			dir = fposmod(dir + 2, 4) # turn around
 		else:
 			dir = best_path['directions'][0]
-		instructor.start_instructor()
 		return dir
 
 
